@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Creastina.CraftingTool.Authentication;
 using Creastina.CraftingTool.Models;
 using Creastina.CraftingTool.Repository;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Creastina.CraftingTool.Controllers.Api;
 
 [ApiController]
+[ApiKey]
 [Route("api/todo")]
 public class TodoController(ITodoRepository todoRepository) : ControllerBase
 {

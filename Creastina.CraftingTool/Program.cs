@@ -1,3 +1,4 @@
+using Creastina.CraftingTool.Authentication;
 using Creastina.CraftingTool.Models;
 using Creastina.CraftingTool.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,7 @@ builder.Services.AddDbContext<CraftingContext>(optionsBuilder =>
     optionsBuilder.UseNpgsql(builder.Configuration.GetConnectionString("Crafting")));
 builder.Services.AddNpgsql<CraftingContext>(builder.Configuration.GetConnectionString("Crafting"));
 
+builder.Services.AddScoped<ApiKeyFilter>();
 builder.Services.AddScoped<ITodoRepository, TodoRepository>();
 
 var app = builder.Build();
