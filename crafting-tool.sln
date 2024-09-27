@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2685B0F7-14A0-4AAC-ACFE-34C271E7686E}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Creastina.CraftingTool", "Creastina.CraftingTool\Creastina.CraftingTool.csproj", "{89BB1D3C-42FD-4271-858F-4B8AA154428C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B2ECBB09-0D3A-4B6D-85A8-6ECDEF050987}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2ECBB09-0D3A-4B6D-85A8-6ECDEF050987}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2ECBB09-0D3A-4B6D-85A8-6ECDEF050987}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2ECBB09-0D3A-4B6D-85A8-6ECDEF050987}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89BB1D3C-42FD-4271-858F-4B8AA154428C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89BB1D3C-42FD-4271-858F-4B8AA154428C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89BB1D3C-42FD-4271-858F-4B8AA154428C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89BB1D3C-42FD-4271-858F-4B8AA154428C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

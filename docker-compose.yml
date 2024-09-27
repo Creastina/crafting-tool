@@ -1,0 +1,10 @@
+﻿services:
+  ct-postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: crafting
+      POSTGRES_PASSWORD: crafting
+      POSTGRES_ROOT_PASSWORD: crafting
+      POSTGRES_USER: crafting
+    ports:
+      - "5432:5432"
