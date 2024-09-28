@@ -1,4 +1,3 @@
-using Blazored.LocalStorage;
 using Creastina.CraftingTool.Authentication;
 using Creastina.CraftingTool.Models;
 using Creastina.CraftingTool.Repository;
@@ -11,10 +10,7 @@ public partial class Todos : ComponentBase
 {
     [Inject] ITodoRepository TodoRepository { get; set; }
     [Inject] IJSRuntime JsRuntime { get; set; }
-    [Inject] ILocalStorageService LocalStorageService { get; set; }
-    [Inject] NavigationManager NavigationManager { get; set; }
     [Inject] CookieAuthenticationChecker CookieAuthenticationChecker { get; set; }
-    [Inject] IHttpContextAccessor HttpContextAccessor { get; set; }
 
     private List<Todo> _todos = [];
 

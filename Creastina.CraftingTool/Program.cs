@@ -1,9 +1,7 @@
-using Blazored.LocalStorage;
 using Creastina.CraftingTool.Authentication;
 using Creastina.CraftingTool.Models;
 using Creastina.CraftingTool.Repository;
 using Creastina.CraftingTool.Components;
-using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +11,6 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddDbContext<CraftingContext>(optionsBuilder =>
     optionsBuilder.UseNpgsql(builder.Configuration.GetConnectionString("Crafting")));
