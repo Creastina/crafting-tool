@@ -1,8 +1,5 @@
 @page "/"
-@inject IJSRuntime JS
-@inject ITodoRepository TodoRepository
-@using Creastina.CraftingTool.Models
-@using Creastina.CraftingTool.Repository
+
 <PageTitle>Crafting Projekte</PageTitle>
 
 <main class="page">
@@ -10,7 +7,7 @@
     <aside class="sidebar">
         @foreach (var todo in _todos.Where(todo => !todo.IsDone))
         {
-            <a class="sidebar__item @(todo.Id == _selectedTodo.Id ? "is--selected" : "")    " @onclick=@(_ => _selectedTodo = todo)>@todo.Title</a>
+            <a class="sidebar__item @(todo.Id == _selectedTodo.Id ? "is--selected" : "")" @onclick=@(_ => _selectedTodo = todo)>@todo.Title</a>
         }
         <a class="sidebar__item @(_selectedTodo.IsNew ? "is--selected" : "")" @onclick="@(_ => _selectedTodo = new Todo { IsNew = true })">Neues Projekt</a>
         <hr class="sidebar__separator"/>
@@ -84,13 +81,14 @@
 
 <dialog class="dialog" id="confirmDelete">
     <form method="post" @onsubmit="DeleteTodo" @formname="delete-todo-form">
+        <AntiforgeryToken/>
         <span class="dialog__title">Projekt @_selectedTodo.Title löschen?</span>
         <p class="dialog__content">
             Möchtest du das Project @_selectedTodo.Title wirklich löschen?
             @if (!_selectedTodo.IsDone)
             {
                 <br/>
-                @: Das Projekt ist noch nicht <erledigt></erledigt>, bist du sicher?
+                @: Das Projekt ist noch nicht erledigt bist du sicher?
             }
         </p>
         <div class="dialog__buttons">
@@ -112,43 +110,3 @@
         </div>
     </form>
 </dialog>
-
-@code {
-
-    private List<Todo> _todos = [];
-
-    private Todo _selectedTodo = new();
-
-    protected override async Task OnParametersSetAsync()
-    {
-        _todos = await TodoRepository.GetAllTodos();
-        _selectedTodo = _todos.FirstOrDefault() ?? new Todo { IsNew = true };
-
-        await base.OnParametersSetAsync();
-    }
-
-    private async Task SaveTodo()
-    {
-        if (_selectedTodo.IsNew)
-        {
-            _selectedTodo = await TodoRepository.CreateTodo(_selectedTodo);
-            _selectedTodo.IsNew = false;
-            _todos = await TodoRepository.GetAllTodos();
-        }
-        else
-        {
-            await TodoRepository.UpdateTodo(_selectedTodo);
-            _todos = await TodoRepository.GetAllTodos();
-            _selectedTodo = _todos.SingleOrDefault(todo => todo.Id == _selectedTodo.Id) ?? new Todo { IsNew = true };
-        }
-    }
-
-    private async Task DeleteTodo()
-    {
-        await TodoRepository.DeleteTodo(_selectedTodo.Id);
-        _todos = await TodoRepository.GetAllTodos();
-        _selectedTodo = _todos.FirstOrDefault() ?? new Todo { IsNew = true };
-        await JS.InvokeVoidAsync("confirmDelete.close");
-    }
-
-}

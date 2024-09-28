@@ -1,7 +1,9 @@
+using Blazored.LocalStorage;
 using Creastina.CraftingTool.Authentication;
 using Creastina.CraftingTool.Models;
 using Creastina.CraftingTool.Repository;
 using Creastina.CraftingTool.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,16 +13,20 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddDbContext<CraftingContext>(optionsBuilder =>
     optionsBuilder.UseNpgsql(builder.Configuration.GetConnectionString("Crafting")));
 builder.Services.AddNpgsql<CraftingContext>(builder.Configuration.GetConnectionString("Crafting"));
 
-builder.Services.AddScoped<ApiKeyFilter>();
+builder.Services.AddScoped<ApiKeyFilter>(); 
+builder.Services.AddScoped<CookieAuthenticationChecker>();
 builder.Services.AddScoped<ITodoRepository, TodoRepository>();
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
@@ -34,6 +40,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAntiforgery();
+app.MapRazorPages();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();

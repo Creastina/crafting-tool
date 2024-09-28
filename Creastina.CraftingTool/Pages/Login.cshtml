@@ -1,0 +1,46 @@
+@page "/login"
+@model Creastina.CraftingTool.Pages.Login
+
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <base href="/"/>
+    <link rel="stylesheet" href="CraftingTool.styles.css"/>
+    <link rel="stylesheet" href="css/poppins.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="icon" href="favicon.svg" type="image/svg"/>
+    <title>Crafting Projekte – Anmelden</title>
+</head>
+
+<body>
+
+<main class="login">
+    <form class="dialog" method="post">
+        <span class="dialog__title">Anmelden</span>
+        <div class="dialog__content form">
+            <label class="label" for="Password">Passwort</label>
+            <input asp-for="Password" type="password" name="Password" id="Password" class="input">
+        </div>
+        <div class="dialog__buttons">
+            <button class="button is--dialog" type="submit">
+                <svg viewBox="0 0 24 24" class="lucide">
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                    <polyline points="10 17 15 12 10 7"/>
+                    <line x1="15" x2="3" y1="12" y2="12"/>
+                </svg>
+                Anmelden
+            </button>
+        </div>
+    </form>
+</main>
+<script src="_framework/blazor.web.js"></script>
+</body>
+
+</html>

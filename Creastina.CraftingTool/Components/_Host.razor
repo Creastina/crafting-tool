@@ -1,5 +1,16 @@
-<h3>_Host</h3>
+@inject IConfiguration _configuration;
+@inject IHttpContextAccessor _httpContextAccessor;
 
 @code {
-    
+
+    protected override void OnInitialized()
+    {
+        var configuredApiKey = _configuration["ApiKey"];
+        var cookie = _httpContextAccessor.HttpContext.Request.Cookies["ApiKey"];
+        if (configuredApiKey != cookie)
+        {
+            _httpContextAccessor.HttpContext.Response.Redirect("/login");
+        }
+    }
+
 }

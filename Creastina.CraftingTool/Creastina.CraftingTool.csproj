@@ -65,6 +65,9 @@
         <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation\dist\jquery.validate.js"/>
         <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation\dist\jquery.validate.min.js"/>
         <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation\LICENSE.md"/>
+        <_ContentIncludedByDefault Remove="Views\Shared\_Layout.cshtml" />
+        <_ContentIncludedByDefault Remove="Views\_ViewImports.cshtml" />
+        <_ContentIncludedByDefault Remove="Views\_ViewStart.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
@@ -74,6 +77,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
             <PrivateAssets>all</PrivateAssets>

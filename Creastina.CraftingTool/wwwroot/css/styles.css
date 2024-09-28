@@ -1,3 +1,30 @@
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+
+    background-image: url("/background.webp");
+    display: grid;
+}
+
+:root {
+    --negative-color: #b43636;
+    --positive-color: #3ab436;
+    --primary-color: #6275D5;
+    --primary-color-selected: rgba(98 117 213 / 0.25);
+    --white: #ffffff;
+    --border-color: #d6d6d6;
+    --backdrop: rgba(255 255 255 / 0.6);
+    --background-modal: rgba(255 255 255 / 0.8);
+
+    font-family: Poppins, sans-serif;
+    font-weight: 300;
+}
+
 .lucide {
     width: 1.5rem;
     height: 1.5rem;
@@ -27,10 +54,16 @@ h1, h2, h3, h4, h5, h6 {
 .page {
     display: grid;
     grid-template: 
-            "header header" auto 
+            "header header" auto
             "sidebar content" 1fr / 1fr 5fr;
-    padding: 10vh 10vw;
+    margin: 10vh 10vw;
     gap: 1rem;
+    background: var(--background-modal);
+    backdrop-filter: blur(24px);
+    box-sizing: border-box;
+    padding: 0 2rem 2rem;
+    border-radius: 1rem;
+    place-self: center;
 }
 
 .header {
