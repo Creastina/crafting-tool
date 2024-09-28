@@ -7,7 +7,7 @@ public class TodoRepository(CraftingContext context) : ITodoRepository
 {
     public Task<List<Todo>> GetAllTodos()
     {
-        return context.Todos.ToListAsync();
+        return context.Todos.OrderBy(o => o.IsDone).ThenBy(o => o.Id).ToListAsync();
     }
 
     public Task<Todo?> GetTodoById(int id)

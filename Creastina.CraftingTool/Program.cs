@@ -1,6 +1,7 @@
 using Creastina.CraftingTool.Authentication;
 using Creastina.CraftingTool.Models;
 using Creastina.CraftingTool.Repository;
+using Creastina.CraftingTool.Components;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,9 @@ builder.Services.AddNpgsql<CraftingContext>(builder.Configuration.GetConnectionS
 builder.Services.AddScoped<ApiKeyFilter>();
 builder.Services.AddScoped<ITodoRepository, TodoRepository>();
 
+builder.Services.AddRazorComponents()
+    .AddInteractiveServerComponents();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -27,8 +31,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseStaticFiles();
-
 app.UseRouting();
 
+app.UseAntiforgery();
+
+app.MapRazorComponents<App>()
+    .AddInteractiveServerRenderMode();
 app.MapControllers();
 app.Run();

@@ -1,0 +1,13 @@
+:root {
+    --negative-color: #b43636;
+    --positive-color: #3ab436;
+    --primary-color: #6275D5;
+    --primary-color-selected: rgba(98 117 213 / 0.25);
+    --white: #ffffff;
+    --border-color: #d6d6d6;
+    --backdrop: rgba(255 255 255 / 0.6);
+    --background-modal: rgba(255 255 255 / 0.8);
+    
+    font-family: Poppins, sans-serif;
+    font-weight: 300;
+}
