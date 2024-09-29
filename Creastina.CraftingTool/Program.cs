@@ -11,6 +11,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.AddDbContext<CraftingContext>(optionsBuilder =>
     optionsBuilder.UseNpgsql(builder.Configuration.GetConnectionString("Crafting")));
