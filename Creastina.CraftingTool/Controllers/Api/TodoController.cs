@@ -40,7 +40,7 @@ public class TodoController(ITodoRepository todoRepository) : ControllerBase
     {
         var created = await todoRepository.CreateTodo(todo);
 
-        return Created(Url.ActionLink("GetById", "Todo", new { id = created.Id }), created);
+        return CreatedAtAction("GetById", "Todo", new { id = created.Id }, created);
     }
 
     [HttpPut("{id:int}")]
