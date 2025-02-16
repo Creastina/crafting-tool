@@ -6,7 +6,7 @@ docker-build:
   image:
     name: gcr.io/kaniko-project/executor:debug
     pull_policy: always
-    entrypoint: ['']
+    entrypoint: [ '' ]
   before_script:
     - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"},\"https://index.docker.io/v1/\":{\"auth\":\"$DOCKER_TOKEN\"}}}" > /kaniko/.docker/config.json
   script:
@@ -31,7 +31,7 @@ merge-manifests:
       artifacts: false
   image:
     name: mplatform/manifest-tool:alpine
-    entrypoint: [""]
+    entrypoint: [ "" ]
   script:
     - >-
       manifest-tool
@@ -45,5 +45,15 @@ merge-manifests:
     matrix:
       - TAG: latest
       - TAG: 1.0.${CI_PIPELINE_IID}
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+
+trigger-server:
+  needs:
+    - job: merge-manifests
+  variables:
+    TAG: 1.0.${CI_PIPELINE_IID}
+  stage: deploy
+  trigger: server-management/main-server.ulbricht.casa/crafting.creastina.art
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
