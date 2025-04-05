@@ -1,0 +1,12 @@
+[package]
+name = "crafting-dbal"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+crafting-entities = { path = "../entities" }
+crafting-error = { path = "../error" }
+
+log = { workspace = true }
+sea-orm = { workspace = true }

@@ -1,34 +1,54 @@
-stages:
-  - deploy
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME !~ "/^dependabot-.*/"
+    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH
 
-docker-build:
-  stage: deploy
+.base-cargo:
+  variables:
+    CARGO_HOME: $CI_PROJECT_DIR/.cargo
+
+.base-frontend-cache:
+  image:
+    name: registry.ulbricht.casa/docker-images/leptos-docker-base-image:latest
+    pull_policy: always
+  extends:
+    - .base-cargo
+  variables:
+    CARGO_PROFILE_RELEASE_PANIC: abort
+    CARGO_PROFILE_RELEASE_CODEGEN_UNITS: 1
+    CARGO_PROFILE_RELEASE_OPT_LEVEL: z
+    CARGO_PROFILE_RELEASE_DEBUG: "false"
+    CARGO_PROFILE_RELEASE_LTO: "true"
+    CARGO_PROFILE_RELEASE_STRIP: "symbols"
+  cache:
+    key: $CI_PROJECT_NAME-leptos
+    paths:
+      - $CI_PROJECT_DIR/target/
+      - $CI_PROJECT_DIR/.cargo/
+      - $CI_PROJECT_DIR/Cargo.lock
+
+.base-docker:
   image:
     name: gcr.io/kaniko-project/executor:debug
     pull_policy: always
-    entrypoint: [ '' ]
+    entrypoint: [ "" ]
   before_script:
     - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"},\"https://index.docker.io/v1/\":{\"auth\":\"$DOCKER_TOKEN\"}}}" > /kaniko/.docker/config.json
+  stage: docker
   script:
-    - /kaniko/executor
-      --context "${CI_PROJECT_DIR}"
-      --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
-      --destination "${CI_REGISTRY_IMAGE}/${ARCH}:1.0.${CI_PIPELINE_IID}"
-      --destination "${CI_REGISTRY_IMAGE}/${ARCH}:latest"
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main"
+    - /kaniko/executor --build-arg "APP=crafting" --build-arg "PKG_DIR=crafting/pkg" --context "dir://${CI_PROJECT_DIR}/$ARCH" --dockerfile "${CI_PROJECT_DIR}/Dockerfile" $KANIKO_FLAGS
   parallel:
     matrix:
-      - ARCH: amd64
-      - ARCH: arm64
+      - ARCH:
+          - amd64
+          - arm64
   tags:
     - runner-${ARCH}
 
-merge-manifests:
+.base-merge-manifests:
   stage: deploy
-  needs:
-    - job: docker-build
-      artifacts: false
   image:
     name: mplatform/manifest-tool:alpine
     entrypoint: [ "" ]
@@ -39,12 +59,68 @@ merge-manifests:
       --password=${CI_REGISTRY_PASSWORD}
       push from-args
       --platforms linux/amd64,linux/arm64
-      --template ${CI_REGISTRY_IMAGE}/ARCH:${TAG}
-      --target ${CI_REGISTRY_IMAGE}:${TAG}
+      --template ${CI_REGISTRY_IMAGE}/ARCH:$TAG
+      --target ${CI_REGISTRY_IMAGE}:$TAG
+
+
+stages:
+  - lint
+  - build
+  - docker
+  - deploy
+  - deploy-testing
+
+lint-web:
+  extends:
+    - .base-frontend-cache
+  stage: lint
+  script:
+    - cd web
+    - cargo clippy --release --features ssr --features hydrate
+
+build-web:
+  extends:
+    - .base-frontend-cache
+  stage: build
+  script:
+    - cd web
+    - cargo leptos build --release
+    - mkdir -p $CI_PROJECT_DIR/$ARCH/crafting
+    - cp $CI_PROJECT_DIR/target/release/crafting-web $CI_PROJECT_DIR/$ARCH/crafting-web
+    - cp -r $CI_PROJECT_DIR/target/site $CI_PROJECT_DIR/$ARCH/crafting/pkg
+  artifacts:
+    paths:
+      - $CI_PROJECT_DIR/$ARCH/crafting-web
+      - $CI_PROJECT_DIR/$ARCH/crafting/pkg
   parallel:
     matrix:
-      - TAG: latest
-      - TAG: 1.0.${CI_PIPELINE_IID}
+      - ARCH:
+          - amd64
+          - arm64
+  tags:
+    - runner-${ARCH}
+
+build-docker-test:
+  extends:
+    - .base-docker
+  stage: docker
+  variables:
+    KANIKO_FLAGS: --no-push
+
+build-docker:
+  extends:
+    - .base-docker
+  stage: docker
+  variables:
+    KANIKO_FLAGS: --destination $CI_REGISTRY_IMAGE/$ARCH:2.0.$CI_PIPELINE_IID
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+
+merge-manifests:
+  extends:
+    - .base-merge-manifests
+  variables:
+    TAG: 2.0.$CI_PIPELINE_IID
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
 
@@ -52,7 +128,7 @@ trigger-server:
   needs:
     - job: merge-manifests
   variables:
-    TAG: 1.0.${CI_PIPELINE_IID}
+    TAG: 2.0.$CI_PIPELINE_IID
   stage: deploy
   trigger: server-management/main-server.ulbricht.casa/crafting.creastina.art
   rules:
