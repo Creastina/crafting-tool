@@ -85,7 +85,7 @@ build-web:
   script:
     - cd web
     - cargo leptos build --release
-    - mkdir -p $CI_PROJECT_DIR/$ARCH/web
+    - mkdir -p $CI_PROJECT_DIR/$ARCH/crafting
     - cp $CI_PROJECT_DIR/target/release/crafting-web $CI_PROJECT_DIR/$ARCH/crafting-web
     - cp -r $CI_PROJECT_DIR/target/site $CI_PROJECT_DIR/$ARCH/crafting/pkg
   artifacts:
