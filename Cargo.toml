@@ -1,0 +1,81 @@
+[package]
+name = "crafting"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+crafting-entities = { path = "entities" }
+crafting-error = { path = "error" }
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+crafting-dbal = { path = "dbal" }
+crafting-migration = { path = "migration" }
+
+[workspace]
+members = [
+    "dbal",
+    "migration",
+    "entities",
+    "error",
+    "web",
+]
+
+[workspace.package]
+version = "2.0.0"
+license = "custom"
+edition = "2021"
+
+[workspace.dependencies]
+actix = "0.13"
+actix-files = "0.6"
+actix-web = "4.9"
+actix_web_openidconnect = { git = "https://github.com/DerKnerd/ActixWeb_openIDConnect.git" }
+console_error_panic_hook = "0.1"
+dotenvy = "0.15"
+env_logger = "0.11"
+leptos = "0.7"
+leptos_actix = "0.7"
+leptos_meta = "0.7"
+leptos_router = "0.7"
+log = "0.4"
+serde_json = "1.0"
+wasm-bindgen = "0.2"
+web-sys = { version = "*", features = ["HtmlDialogElement"] }
+
+[workspace.dependencies.sea-orm]
+version = "1.1"
+features = [
+    "with-json",
+    "runtime-actix-rustls",
+    "sqlx-postgres",
+]
+
+[workspace.dependencies.sea-orm-migration]
+version = "1.1"
+features = [
+    "sqlx-postgres",
+    "runtime-tokio-rustls",
+]
+
+[workspace.dependencies.serde]
+version = "1.0"
+features = ["derive"]
+
+[profile.wasm-release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+inherits = "release"
+
+[profile.web-dev]
+opt-level = "z"
+inherits = "dev"
+
+[profile.web-release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+inherits = "release"
