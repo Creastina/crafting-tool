@@ -42,7 +42,7 @@ async fn main() -> std::io::Result<()> {
 
     let openid = ActixWebOpenId::init(
         std::env::var("OIDC_CLIENT_ID").expect("OIDC_CLIENT_ID"),
-        std::env::var("OIDC_CLIENT_SECRET").expect("OIDC_CLIENT_SECRET"),
+        None,
         std::env::var("SERVER_HOST").expect("SERVER_HOST") + "auth_callback",
         std::env::var("OIDC_ISSUER").expect("OIDC_ISSUER"),
         should_auth,
@@ -53,6 +53,7 @@ async fn main() -> std::io::Result<()> {
             .split(",")
             .map(|s| s.to_string())
             .collect::<Vec<_>>(),
+        true,
     )
     .await;
 
