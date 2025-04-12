@@ -11,6 +11,7 @@ use leptos::prelude::*;
 use leptos_actix::{generate_route_list, LeptosRoutes};
 use leptos_meta::MetaTags;
 use log::LevelFilter;
+use std::io;
 
 #[cfg(feature = "ssr")]
 #[actix_web::main]
@@ -40,22 +41,23 @@ async fn main() -> std::io::Result<()> {
             && req.method() != actix_web::http::Method::OPTIONS
     };
 
-    let openid = ActixWebOpenId::init(
+    let openid = ActixWebOpenId::builder(
         std::env::var("OIDC_CLIENT_ID").expect("OIDC_CLIENT_ID"),
-        None,
         std::env::var("SERVER_HOST").expect("SERVER_HOST") + "auth_callback",
         std::env::var("OIDC_ISSUER").expect("OIDC_ISSUER"),
-        should_auth,
-        Some(std::env::var("SERVER_HOST").expect("SERVER_HOST")),
-        vec!["openid".to_string()],
+    )
+    .should_auth(should_auth)
+    .post_logout_redirect_url(std::env::var("SERVER_HOST").expect("SERVER_HOST"))
+    .additional_audiences(
         std::env::var("OIDC_ADDITIONAL_AUD")
             .expect("OIDC_ADDITIONAL_AUD")
             .split(",")
             .map(|s| s.to_string())
             .collect::<Vec<_>>(),
-        true,
     )
-    .await;
+    .build_and_init()
+    .await
+    .map_err(io::Error::other)?;
 
     HttpServer::new(move || {
         let leptos_options = conf.leptos_options.clone();
