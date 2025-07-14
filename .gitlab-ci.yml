@@ -58,7 +58,7 @@ workflow:
     name: mplatform/manifest-tool:alpine
     entrypoint: [ "" ]
   variables:
-    IMAGE: $CI_REGISTRY_IMAGE/$APP
+    IMAGE: $CI_REGISTRY_IMAGE
     IMAGE_TAG: $IMAGE:$TAG
   script:
     - buildah manifest create $IMAGE_TAG
