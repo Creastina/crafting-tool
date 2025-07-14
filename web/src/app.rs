@@ -258,11 +258,13 @@ fn AppPage() -> impl IntoView {
                                 class="button"
                                 name="action"
                                 value=move || {
-                                    selected_todo
+                                    if selected_todo
                                         .read()
-                                        .is_new
-                                        .then_some("create")
-                                        .unwrap_or("update")
+                                        .is_new {
+                                        "create"
+                                    } else {
+                                        "update"
+                                    }
                                 }
                             >
                                 <svg viewBox="0 0 24 24" class="lucide">
