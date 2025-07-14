@@ -62,20 +62,29 @@ features = [
 version = "1"
 features = ["derive"]
 
-[profile.wasm-release]
-opt-level = "z"
-lto = true
-codegen-units = 1
-panic = "abort"
-inherits = "release"
-
 [profile.web-dev]
-opt-level = "z"
 inherits = "dev"
+# optimization for size (more aggressive)
+opt-level = "z"
+strip = false
 
 [profile.web-release]
+inherits = "release"
+# less code to include in binary
+panic = "abort"
+# optimization over all codebase (better optimization, slower build)
+codegen-units = 1
+# optimization for size (more aggressive)
 opt-level = "z"
+# link time optimization using whole-program analysis
+lto = true
+strip = false
+
+# Defines a size-optimized profile for the WASM bundle in release mode
+[profile.wasm-release]
+inherits = "release"
+opt-level = 'z'
 lto = true
 codegen-units = 1
 panic = "abort"
-inherits = "release"
+strip = false
