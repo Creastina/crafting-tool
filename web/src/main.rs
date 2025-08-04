@@ -46,6 +46,8 @@ async fn main() -> std::io::Result<()> {
         std::env::var("SERVER_HOST").expect("SERVER_HOST") + "auth_callback",
         std::env::var("OIDC_ISSUER").expect("OIDC_ISSUER"),
     )
+    .allow_all_audiences(true)
+    .redirect_on_error(true)
     .should_auth(should_auth)
     .post_logout_redirect_url(std::env::var("SERVER_HOST").expect("SERVER_HOST"))
     .additional_audiences(

@@ -224,9 +224,8 @@ dependencies = [
 
 [[package]]
 name = "actix_web_openidconnect"
-version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bfa15e23311d7cce67d710b4000db3a10b86597ab80da316033adedec8d27234"
+version = "0.1.3"
+source = "git+https://github.com/DerKnerd/ActixWeb_openIDConnect.git#a33b4ec924d1fe0693933199f872ea30e8b81c10"
 dependencies = [
  "actix-web",
  "anyhow",
