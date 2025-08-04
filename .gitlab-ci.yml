@@ -40,7 +40,7 @@ workflow:
   stage: docker
   variables:
     TAG: test
-    IMAGE_TAG: $CI_REGISTRY_IMAGE/$APP/$ARCH:$TAG
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/$ARCH:$TAG
   script:
     - buildah build --platform=linux/$ARCH --build-arg "APP=crafting-web" --build-arg "PKG_DIR=crafting/pkg" -f "$CI_PROJECT_DIR/docker/Dockerfile" -t $IMAGE_TAG $CI_PROJECT_DIR/$ARCH
     - "[[ -z '$NO_PUSH' ]] || buildah push $IMAGE_TAG"
