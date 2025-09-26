@@ -27,7 +27,6 @@ workflow:
     paths:
       - $CI_PROJECT_DIR/target/
       - $CI_PROJECT_DIR/.cargo/
-      - $CI_PROJECT_DIR/Cargo.lock
 
 .base-docker:
   image: registry.ulbricht.casa/docker-images/buildah:latest
