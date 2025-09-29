@@ -47,16 +47,9 @@ async fn main() -> std::io::Result<()> {
         std::env::var("OIDC_ISSUER").expect("OIDC_ISSUER"),
     )
     .allow_all_audiences(true)
-    .redirect_on_error(true)
+    .redirect_on_error(false)
     .should_auth(should_auth)
     .post_logout_redirect_url(std::env::var("SERVER_HOST").expect("SERVER_HOST"))
-    .additional_audiences(
-        std::env::var("OIDC_ADDITIONAL_AUD")
-            .expect("OIDC_ADDITIONAL_AUD")
-            .split(",")
-            .map(|s| s.to_string())
-            .collect::<Vec<_>>(),
-    )
     .build_and_init()
     .await
     .map_err(io::Error::other)?;
