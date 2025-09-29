@@ -24,13 +24,13 @@ members = [
 [workspace.package]
 version = "2.0.0"
 license = "custom"
-edition = "2021"
+edition = "2024"
 
 [workspace.dependencies]
 actix = "0.13"
 actix-files = "0.6"
 actix-web = "4"
-actix_web_openidconnect = { git = "https://github.com/DerKnerd/ActixWeb_openIDConnect.git" }
+actix_web_openidconnect = "0.3"
 console_error_panic_hook = "0.1"
 dotenvy = "0.15"
 env_logger = "0.11"
