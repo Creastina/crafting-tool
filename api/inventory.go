@@ -12,7 +12,7 @@ import (
 func getInventoryBoxes(w http.ResponseWriter, r *http.Request) {
 	encoder := json.NewEncoder(w)
 
-	boxes, err := database.Select[database.InventoryBox]("select * from inventory_box")
+	boxes, err := database.Select[database.InventoryBox]("select * from inventory_box order by name")
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		_ = encoder.Encode(map[string]string{

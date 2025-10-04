@@ -1,7 +1,7 @@
 package database
 
 func GetInstructions() ([]Instruction, error) {
-	return Select[Instruction]("select * from instruction")
+	return Select[Instruction]("select * from instruction order by name")
 }
 
 func GetInstruction(id int) (*Instruction, error) {
@@ -79,7 +79,7 @@ insert into instruction_step (instruction_id, description, done) values ($1, $2,
 }
 
 func GetInstructionSteps(instructionId int) ([]InstructionStep, error) {
-	return Select[InstructionStep]("select * from instruction_step where instruction_id = $1", instructionId)
+	return Select[InstructionStep]("select * from instruction_step where instruction_id = $1 order by id", instructionId)
 }
 
 func GetInstructionStep(stepId, instructionId int) (*InstructionStep, error) {

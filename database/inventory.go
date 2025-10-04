@@ -3,7 +3,7 @@ package database
 import "encoding/json"
 
 func GetInventoryItems(boxId int) ([]InventoryItemWithProjectCount, error) {
-	items, err := Select[InventoryItemWithProjectCount]("select * from inventory_item_with_count where box_id = $1", boxId)
+	items, err := Select[InventoryItemWithProjectCount]("select * from inventory_item_with_count where box_id = $1 order by name", boxId)
 	if err != nil {
 		return nil, err
 	}
