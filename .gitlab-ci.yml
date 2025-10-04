@@ -1,32 +1,15 @@
 workflow:
   rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME !~ "/^dependabot-.*/"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_PIPELINE_SOURCE == "push"
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH
 
-.base-cargo:
-  variables:
-    CARGO_HOME: $CI_PROJECT_DIR/.cargo
-
-.base-frontend-cache:
-  image:
-    name: registry.ulbricht.casa/docker-images/leptos-docker-base-image:latest
-    pull_policy: always
-  extends:
-    - .base-cargo
-  variables:
-    CARGO_PROFILE_RELEASE_PANIC: abort
-    CARGO_PROFILE_RELEASE_CODEGEN_UNITS: 1
-    CARGO_PROFILE_RELEASE_OPT_LEVEL: z
-    CARGO_PROFILE_RELEASE_DEBUG: "false"
-    CARGO_PROFILE_RELEASE_LTO: "true"
-    CARGO_PROFILE_RELEASE_STRIP: "symbols"
-  cache:
-    key: $CI_PROJECT_NAME-leptos
-    paths:
-      - $CI_PROJECT_DIR/target/
-      - $CI_PROJECT_DIR/.cargo/
+stages:
+  - lint
+  - build
+  - docker
+  - deploy
 
 .base-docker:
   image: registry.ulbricht.casa/docker-images/buildah:latest
@@ -34,102 +17,85 @@ workflow:
     - echo "$CI_REGISTRY_PASSWORD" | buildah login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
     - echo "$CI_JOB_TOKEN" | buildah login -u gitlab-ci-token --password-stdin gitlab.imanuel.dev:443
 
-.base-docker-build:
-  extends: .base-docker
-  stage: docker
-  variables:
-    TAG: test
-    IMAGE_TAG: $CI_REGISTRY_IMAGE/$ARCH:$TAG
-  script:
-    - buildah build --platform=linux/$ARCH --build-arg CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX=$CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX --build-arg "APP=crafting-web" --build-arg "PKG_DIR=crafting/pkg" -f "$CI_PROJECT_DIR/Dockerfile" -t $IMAGE_TAG $CI_PROJECT_DIR/$ARCH
-    - "[[ -z '$NO_PUSH' ]] || buildah push $IMAGE_TAG"
-  parallel:
-    matrix:
-      - ARCH:
-          - amd64
-          - arm64
-  tags:
-    - runner-${ARCH}
-
-.base-merge-manifests:
-  stage: deploy
-  extends: .base-docker
-  variables:
-    IMAGE: $CI_REGISTRY_IMAGE
-    IMAGE_TAG: $IMAGE:$TAG
-  script:
-    - buildah manifest create $IMAGE_TAG
-    - buildah manifest add $IMAGE_TAG docker://$IMAGE/amd64:$TAG
-    - buildah manifest add $IMAGE_TAG docker://$IMAGE/arm64:$TAG
-    - buildah manifest push --all $IMAGE_TAG
-
-stages:
-  - lint
-  - build
-  - docker
-  - deploy
-  - deploy-testing
-
-lint-web:
-  extends:
-    - .base-frontend-cache
+lint-frontend:
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/oven/bun:latest
   stage: lint
   script:
-    - cd web
-    - cargo clippy --release --features ssr --features hydrate
+    - bun install -f
+    - bun run lint
 
-build-web:
-  extends:
-    - .base-frontend-cache
+build:
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/library/golang:1.25-alpine
   stage: build
   script:
-    - cd web
-    - cargo leptos build --release
-    - mkdir -p $CI_PROJECT_DIR/$ARCH/crafting
-    - cp $CI_PROJECT_DIR/target/release/crafting-web $CI_PROJECT_DIR/$ARCH/crafting-web
-    - cp -r $CI_PROJECT_DIR/target/site $CI_PROJECT_DIR/$ARCH/crafting/pkg
-  artifacts:
-    paths:
-      - $CI_PROJECT_DIR/$ARCH/crafting-web
-      - $CI_PROJECT_DIR/$ARCH/crafting/pkg
+    - go vet .
+    - go build -o $CI_PROJECT_DIR/$ARCH/crafting
   parallel:
     matrix:
-      - ARCH:
-          - amd64
-          - arm64
+      - ARCH: amd64
+      - ARCH: arm64
   tags:
     - runner-${ARCH}
+  artifacts:
+    paths:
+      - $CI_PROJECT_DIR/$ARCH/crafting
 
-build-docker-test:
-  extends:
-    - .base-docker-build
+docker-build-test:
   stage: docker
-  variables:
-    NO_PUSH: yes
-
-build-docker:
-  extends:
-    - .base-docker-build
-  stage: docker
-  variables:
-    TAG: 2.0.$CI_PIPELINE_IID
+  extends: .base-docker
+  script:
+    - buildah build --platform=linux/$ARCH --build-arg CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX=$CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX -f $CI_PROJECT_DIR/Dockerfile $CI_PROJECT_DIR/$ARCH
   rules:
-    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  parallel:
+    matrix:
+      - ARCH: amd64
+      - ARCH: arm64
+  tags:
+    - runner-$ARCH
+
+docker-build:
+  stage: docker
+  extends: .base-docker
+  variables:
+    IMG: $CI_REGISTRY_IMAGE/$ARCH:$CI_COMMIT_TAG
+  script:
+    - buildah build --platform=linux/$ARCH --build-arg CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX=$CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX -t $IMG -f $CI_PROJECT_DIR/Dockerfile $CI_PROJECT_DIR/$ARCH
+    - buildah push $IMG
+  rules:
+    - if: $CI_COMMIT_TAG
+  parallel:
+    matrix:
+      - ARCH: amd64
+      - ARCH: arm64
+  tags:
+    - runner-$ARCH
 
 merge-manifests:
-  extends:
-    - .base-merge-manifests
-  variables:
-    TAG: 2.0.$CI_PIPELINE_IID
+  stage: deploy
+  extends: .base-docker
+  needs:
+    - job: docker-build
+      artifacts: false
+  script:
+    - buildah manifest create $FQ_IMAGE_NAME
+    - buildah manifest add $FQ_IMAGE_NAME docker://$CI_REGISTRY_IMAGE/amd64:$CI_COMMIT_TAG
+    - buildah manifest add $FQ_IMAGE_NAME docker://$CI_REGISTRY_IMAGE/arm64:$CI_COMMIT_TAG
+    - buildah manifest push --all $FQ_IMAGE_NAME
+  parallel:
+    matrix:
+      - FQ_IMAGE_NAME: $CI_REGISTRY_IMAGE:latest
+      - FQ_IMAGE_NAME: $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
   rules:
-    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_TAG
 
 trigger-server:
   needs:
     - job: merge-manifests
   variables:
-    TAG: 2.0.$CI_PIPELINE_IID
+    TAG: $CI_COMMIT_TAG
   stage: deploy
   trigger: server-management/main-server.ulbricht.casa/crafting.creastina.art
   rules:
-    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_TAG

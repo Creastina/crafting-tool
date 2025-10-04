@@ -1,0 +1,23 @@
+{
+  "name": "crafting-tool",
+  "version": "2.0.0",
+  "private": true,
+  "scripts": {
+    "lint": "bun run prettier && bun run eslint && bun run stylelint",
+    "prettier": "prettier static/js --check",
+    "eslint": "eslint -c eslint.config.cjs static/js/",
+    "stylelint": "stylelint static/css/**/*.css",
+    "format": "prettier static --write"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@eslint/js": "^9.37.0",
+    "@types/alpinejs": "^3.13.11",
+    "eslint": "^9.37.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^16.4.0",
+    "prettier": "^3.6.2",
+    "stylelint": "^16.25.0",
+    "stylelint-config-standard": "^39.0.0"
+  }
+}

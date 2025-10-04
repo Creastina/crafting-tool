@@ -1,0 +1,33 @@
+:root {
+    --primary-color: #6275d5;
+    --accent-1-color: #598c79;
+    --accent-2-color: #94ebca;
+    --background-color: #eeeff3;
+    --background-lighter-color: #f4f5f9;
+    --background-darker-color: #e4eaf7;
+    --negative-color: #dc2d2d;
+    --text-color: #16171c;
+    --bold-text: 400 1rem 'Gluten', cursive;
+    --list-item: 300 1.25rem 'Gluten', cursive;
+    --heading-1: 400 2rem 'Gluten', cursive;
+    --heading-2: 400 1.5rem 'Gluten', cursive;
+    --menu-brand: 600 1.25rem 'Gluten', cursive;
+    --menu-item: 300 1.25rem 'Gluten', cursive;
+    --not-so-side-note: 200 1rem 'Gluten', cursive;
+    --regular-text: 300 1rem 'Gluten', cursive;
+    --side-note: 100 1rem 'Gluten', cursive;
+}
+
+body {
+    color: var(--text-color);
+    background-image: url("../img/background.webp");
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    font: var(--regular-text);
+    height: 100vh;
+    width: 100vw;
+    padding: 0;
+    margin: 0;
+}
