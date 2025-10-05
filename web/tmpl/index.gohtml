@@ -13,6 +13,9 @@
         <link href="/static/css/gluten.css" rel="stylesheet" type="text/css">
         <link href="/static/css/variables.css" rel="stylesheet" type="text/css">
         <link href="/static/css/page.css" rel="stylesheet" type="text/css">
+        <link href="/static/css/button.css" rel="stylesheet" type="text/css">
+        <link href="/static/css/typography.css" rel="stylesheet" type="text/css">
+        <link href="/static/css/login.css" rel="stylesheet" type="text/css">
 
         <script src="/static/lib/ui/loader.js"></script>
         <script>
@@ -25,7 +28,7 @@
     </head>
     <body x-init>
     <main class="creastina-page">
-        <template x-if="$store.loaded">
+        <template x-if="!$store.loaded">
             <creastina-loader></creastina-loader>
         </template>
         <div id="app">
@@ -43,6 +46,18 @@
                     x-route="/inventory"
                     x-handler="[$store.authentication.needsLogin, $store.navigation.fetchScript]"
                     x-template="/static/templates/inventory.html"
+            ></template>
+
+            <template
+                    x-route="/projects"
+                    x-handler="[$store.authentication.needsLogin, $store.navigation.fetchScript]"
+                    x-template="/static/templates/projects.html"
+            ></template>
+
+            <template
+                    x-route="/instructions"
+                    x-handler="[$store.authentication.needsLogin, $store.navigation.fetchScript]"
+                    x-template="/static/templates/instructions.html"
             ></template>
 
             <template

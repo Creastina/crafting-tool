@@ -1,8 +1,10 @@
 package web
 
 import (
+	"crafting/config"
 	"embed"
 	"html/template"
+	fs2 "io/fs"
 	"net/http"
 	"os"
 )
@@ -11,7 +13,12 @@ import (
 var tmplFs embed.FS
 
 func indexPage(w http.ResponseWriter, r *http.Request) {
-	t, err := template.New("content").ParseFS(tmplFs, "tmpl/index.gohtml")
+	var fs fs2.FS
+	fs = tmplFs
+	if config.LoadedConfiguration.Env == "dev" {
+		fs = os.DirFS("web")
+	}
+	t, err := template.New("content").ParseFS(fs, "tmpl/index.gohtml")
 	if err == nil {
 		t.Execute(w, struct {
 			OidcFrontendClientId string
