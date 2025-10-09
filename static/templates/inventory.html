@@ -1,0 +1,140 @@
+<div x-data="inventoryData">
+  <template x-if="loading">
+    <creastina-loader></creastina-loader>
+  </template>
+  <template x-if="!loading">
+    <div class="creastina-view">
+      <aside class="creastina-sidebar">
+        <div class="creastina-sidebar__header">
+          <svg viewBox="0 0 24 24">
+            <path
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M2.5 7.5v6c0 3.771 0 5.657 1.172 6.828S6.729 21.5 10.5 21.5h3c3.771 0 5.657 0 6.828-1.172S21.5 17.271 21.5 13.5v-6M3.87 5.315L2.5 7.5h19l-1.252-2.087c-.854-1.423-1.28-2.134-1.969-2.524c-.687-.389-1.517-.389-3.176-.389h-6.15c-1.623 0-2.435 0-3.113.375c-.678.376-1.109 1.064-1.97 2.44M12 7.5v-5m-2 8h4"
+            />
+          </svg>
+          <span>Meine Boxen</span>
+        </div>
+        <div class="creastina-sidebar__content">
+          <template x-for="box in boxes" :key="box.id">
+            <a
+              @click="selectBox(box)"
+              x-active="selectedBox?.id === box.id"
+              class="creastina-sidebar__item"
+              x-text="box.name"
+            ></a>
+          </template>
+        </div>
+        <button @click="createBox" class="creastina-sidebar__button">
+          <svg viewBox="0 0 24 24">
+            <path
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M12 4v16m8-8H4"
+            />
+          </svg>
+          Neue Box
+        </button>
+      </aside>
+      <template x-if="selectedBox">
+        <div class="creastina-content">
+          <div class="creastina-toolbar">
+            <button class="creastina-button is--primary" @click="createItem">Neues ins Inventar</button>
+          </div>
+          <div class="creastina-card__list" x-masonry>
+            <template x-for="item in filteredBoxContent" :key="item.id">
+              <div class="creastina-card">
+                <div class="creastina-card__header">
+                  <span x-text="item.name"></span>
+                  <div class="creastina-card__buttons">
+                    <button class="creastina-button is--icon is--primary" @click="updateItem(item)">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M3.5 18.985V20.5h1.514c1.227 0 1.84 0 2.391-.228c.551-.229.985-.662 1.852-1.53l9.864-9.863c.883-.883 1.324-1.324 1.373-1.866q.012-.135 0-.269c-.05-.541-.49-.983-1.373-1.865c-.883-.883-1.324-1.324-1.865-1.373a1.5 1.5 0 0 0-.27 0c-.541.049-.982.49-1.865 1.373l-9.864 9.864c-.867.867-1.3 1.3-1.529 1.852c-.228.55-.228 1.164-.228 2.39M13.5 6.5l4 4"
+                        />
+                      </svg>
+                    </button>
+                    <button class="creastina-button is--icon is--negative" @click="deleteItem(item)">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-width="2"
+                          d="m19.5 5.5l-.62 10.025c-.158 2.561-.237 3.842-.88 4.763a4 4 0 0 1-1.2 1.128c-.957.584-2.24.584-4.806.584c-2.57 0-3.855 0-4.814-.585a4 4 0 0 1-1.2-1.13c-.642-.922-.72-2.205-.874-4.77L4.5 5.5M9 11.735h6m-4.5 3.919h3M3 5.5h18m-4.945 0l-.682-1.408c-.454-.936-.68-1.403-1.071-1.695a2 2 0 0 0-.275-.172C13.594 2 13.074 2 12.034 2c-1.065 0-1.598 0-2.039.234a2 2 0 0 0-.278.18c-.396.303-.617.788-1.059 1.757L8.053 5.5"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="creastina-card__content">
+                  <span x-text="item.note" class="creastina-card__not-so-sidenote"></span>
+                  <span x-text="getProjectCount(item.projectCount)" class="creastina-card__sidenote"></span>
+                  <dl class="creastina-properties">
+                    <template x-for="property in Object.keys(item.properties)" :key="property">
+                      <div style="display: contents">
+                        <dt x-text="property"></dt>
+                        <dd x-text="item.properties[property]"></dd>
+                      </div>
+                    </template>
+                  </dl>
+                  <div class="creastina-stocker">
+                    <button class="creastina-stocker__button" @click="decreaseStock(item)" :disabled="item.count <= 0">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="1.5"
+                          d="M20 12H4"
+                        />
+                      </svg>
+                    </button>
+                    <span x-text="getStockText(item)"></span>
+                    <button class="creastina-stocker__button" @click="increaseStock(item)">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="1.5"
+                          d="M12 4v16m8-8H4"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </template>
+            <template x-if="boxContent.length === 0">
+              <div class="creastina-message">
+                <p>Die Box <span x-text="selectedBox.name"></span> ist leer, leg doch was rein.</p>
+              </div>
+            </template>
+            <template x-if="boxContent.length !== 0 && filteredBoxContent.length === 0">
+              <div class="creastina-message">
+                <p>
+                  Zu deiner Suche wurde nichts in der Box <span x-text="selectedBox.name"></span>
+                  gefunden
+                </p>
+              </div>
+            </template>
+          </div>
+        </div>
+      </template>
+    </div>
+  </template>
+</div>

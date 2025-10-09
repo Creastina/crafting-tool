@@ -1,0 +1,48 @@
+.creastina-dialog__container {
+  display: flex;
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(4px);
+  justify-content: center;
+  align-items: center;
+}
+
+.creastina-dialog {
+  display: flex;
+  height: auto;
+  flex-direction: column;
+}
+
+.creastina-dialog__header {
+  display: flex;
+  background: var(--accent-1-color);
+  color: var(--background-color);
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  padding: 1rem 1rem 0.75rem;
+
+  &.is--negative {
+    background: var(--negative-color);
+  }
+}
+
+.creastina-dialog__title {
+  display: flex;
+  margin: 0;
+}
+
+.creastina-dialog__content {
+  display: flex;
+  background: var(--background-darker-color);
+  flex-direction: column;
+  padding: 1rem;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  gap: 1rem;
+}
+
+.creastina-dialog__buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: end;
+}

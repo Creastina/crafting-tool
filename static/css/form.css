@@ -1,0 +1,34 @@
+.creastina-form {
+  display: grid;
+  grid-template-columns: minmax(5rem, auto) minmax(15rem, 1fr);
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.creastina-input {
+  display: flex;
+  outline: none;
+  box-shadow: none;
+  background: var(--background-lighter-color);
+  color: var(--text-color);
+  font: var(--regular-text);
+  height: 1.5rem;
+  align-items: center;
+  padding: 0.25rem 0.5rem 0.125rem;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  border: 0.125rem solid var(--background-color);
+
+  &::selection {
+    background: var(--primary-color);
+    color: var(--background-color);
+  }
+
+  &:focus {
+    border: 0.125rem solid var(--primary-color);
+  }
+
+  &:invalid {
+    border: 0.125rem solid var(--negative-color);
+  }
+}

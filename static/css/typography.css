@@ -1,7 +1,11 @@
 h1 {
-    font: var(--heading-1);
+  font: var(--heading-1);
 }
 
 h2 {
-    font: var(--heading-2);
+  font: var(--heading-2);
+}
+
+b {
+  font: var(--bold-text);
 }

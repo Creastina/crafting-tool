@@ -19,28 +19,31 @@ export default async function confirm({
   return new Promise((resolve) => {
     const container = document.createElement('div');
     document.body.appendChild(container);
-    const modalId = crypto.randomUUID();
 
     container.innerHTML = `
-      <div class="cosmo-modal__container">
-        <div class="cosmo-modal ${negative ? 'is--negative' : ''} ${warning ? 'is--warning' : ''}">
-          <h1 class="cosmo-modal__title">${title}</h1>
-          <p class="cosmo-modal__content">${message}</p>
-          <div class="cosmo-modal__button-bar">
-            <button id="${modalId}DeclineButton" class="cosmo-button">${declineLabel}</button>
-            <button id="${modalId}ApproveButton" class="cosmo-button">${approveLabel}</button>
+      <div class="creastina-dialog__container">
+        <div class="creastina-dialog" style="max-width: 40rem">
+          <header class="creastina-dialog__header ${negative ? 'is--negative' : ''} ${warning ? 'is--warning' : ''}">
+            <h1 class="creastina-dialog__title">${title}</h1>
+          </header>
+          <div class="creastina-dialog__content">
+            <p class="creastina-dialog__message">${message}</p>
+            <div class="creastina-dialog__buttons">
+                <button data-action="decline" class="creastina-button">${declineLabel}</button>
+                <button data-action="approve" class="creastina-button ${negative ? 'is--negative' : ''} ${warning ? 'is--warning' : ''}">${approveLabel}</button>
+            </div>
           </div>
         </div>
       </div>`;
 
     document.body.appendChild(container);
 
-    document.getElementById(`${modalId}DeclineButton`).addEventListener('click', (e) => {
+    container.querySelector('[data-action=decline]').addEventListener('click', (e) => {
       e.preventDefault();
       container.remove();
       resolve(false);
     });
-    document.getElementById(`${modalId}ApproveButton`).addEventListener('click', (e) => {
+    container.querySelector('[data-action=approve]').addEventListener('click', (e) => {
       e.preventDefault();
       container.remove();
       resolve(true);

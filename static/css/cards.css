@@ -1,0 +1,54 @@
+.creastina-card__list {
+  display: flex;
+  gap: 2rem;
+  flex-flow: row wrap;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  background-color: var(--background-lighter-color);
+  max-height: calc(100vh - 2rem - 4rem - 3.25rem - 2rem - 1.5rem - 2rem);
+  overflow-y: auto;
+  justify-content: start;
+
+  &::after {
+    content: '';
+    flex-grow: 999999999;
+  }
+}
+
+.creastina-card {
+  background-color: var(--background-color);
+  border-radius: 1rem;
+  padding: 1rem;
+  display: flex;
+  transition: all 0.3s;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+.creastina-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font: var(--card-header);
+}
+
+.creastina-card__buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.creastina-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.creastina-card__not-so-sidenote {
+  font: var(--not-so-sidenote);
+  color: var(--text-color);
+}
+
+.creastina-card__sidenote {
+  font: var(--sidenote);
+  color: var(--text-color);
+}

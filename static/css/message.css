@@ -1,0 +1,18 @@
+.creastina-message {
+  display: flex;
+  padding: 1rem 1rem 0.75rem;
+  border-radius: 0.5rem;
+
+  p {
+    margin: 0;
+  }
+
+  &.is--negative {
+    background: var(--negative-color);
+    color: var(--background-color);
+  }
+
+  &.is--hidden {
+    display: none;
+  }
+}

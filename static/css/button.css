@@ -1,30 +1,61 @@
 .creastina-button {
-    background-color: var(--accent-2-color);
-    font: var(--regular-text);
-    padding: 0.5rem;
-    border-radius: 0.75rem;
-    border: none;
-    box-shadow: none;
-    outline: none;
-    cursor: pointer;
-    color: var(--text-color);
-    transition: all 0.3s;
+  background-color: var(--accent-2-color);
+  font: var(--regular-text);
+  padding: 0.5rem 0.5rem 0.25rem;
+  border-radius: 0.75rem;
+  border: none;
+  box-shadow: none;
+  outline: none;
+  cursor: pointer;
+  color: var(--text-color);
+  transition: all 0.3s;
 
-    &:hover {
-        filter: brightness(0.8);
-    }
+  &:hover {
+    filter: brightness(0.8);
+  }
+
+  &.is--primary {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+  }
+
+  &.is--negative {
+    background-color: var(--negative-color);
+    color: var(--background-color);
+  }
+
+  &.is--secondary {
+    background-color: var(--background-color);
+  }
+
+  &.is--icon {
+    padding: 0.25rem;
+    border-radius: 0.5rem;
+    background: none;
 
     &.is--primary {
+      color: var(--primary-color);
+
+      &:hover {
+        filter: none;
         background-color: var(--primary-color);
         color: var(--background-color);
+      }
     }
 
     &.is--negative {
+      color: var(--negative-color);
+
+      &:hover {
+        filter: none;
         background-color: var(--negative-color);
         color: var(--background-color);
+      }
     }
 
-    &.is--secondary {
-        background-color: var(--background-color);
+    svg {
+      height: 1.5rem;
+      width: 1.5rem;
     }
+  }
 }

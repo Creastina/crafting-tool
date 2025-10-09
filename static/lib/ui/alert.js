@@ -7,32 +7,29 @@
  * @param positive {boolean}
  * @return {Promise<void>}
  */
-export default async function alert({
-  title = window.location.href,
-  message,
-  closeLabel,
-  negative = false,
-  positive = false,
-}) {
+export default async function alert({ title = window.location.href, message, closeLabel, negative = false }) {
   return new Promise((resolve) => {
     const container = document.createElement('div');
     document.body.appendChild(container);
-    const modalId = crypto.randomUUID();
 
     container.innerHTML = `
-      <div class="cosmo-modal__container">
-        <div class="cosmo-modal ${negative ? 'is--negative' : ''} ${positive ? 'is--positive' : ''}">
-          <h1 class="cosmo-modal__title">${title}</h1>
-          <p class="cosmo-modal__content">${message}</p>
-          <div class="cosmo-modal__button-bar">
-            <button id="${modalId}CloseButton" class="cosmo-button">${closeLabel}</button>
+      <div class="creastina-dialog__container">
+        <div class="creastina-dialog" style="max-width: 40rem">
+          <header class="creastina-dialog__header ${negative ? 'is--negative' : ''}">
+            <h1 class="creastina-dialog__title">${title}</h1>
+          </header>
+          <div class="creastina-dialog__content">
+            <p class="creastina-dialog__message">${message}</p>
+            <div class="creastina-dialog__buttons">
+              <button data-action="close" class="creastina-button ${negative ? 'is--negative' : ''}">${closeLabel}</button>
+            </div>
           </div>
         </div>
       </div>`;
 
     document.body.appendChild(container);
 
-    document.getElementById(`${modalId}CloseButton`).addEventListener('click', (e) => {
+    container.querySelector('[data-action=close]').addEventListener('click', (e) => {
       e.preventDefault();
       container.remove();
       resolve();

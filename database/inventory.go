@@ -112,3 +112,15 @@ func DeleteInventoryItem(id, boxId int) error {
 	_, err := dbMap.Exec("delete from inventory_item where id = $1 and box_id = $2", id, boxId)
 	return err
 }
+
+func DecreaseStock(id, boxId int) error {
+	_, err := dbMap.Exec("update inventory_item set count = count - 1 where id = $1 and box_id = $2", id, boxId)
+
+	return err
+}
+
+func IncreaseStock(id, boxId int) error {
+	_, err := dbMap.Exec("update inventory_item set count = count + 1 where id = $1 and box_id = $2", id, boxId)
+
+	return err
+}

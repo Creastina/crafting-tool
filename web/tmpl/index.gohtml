@@ -16,6 +16,14 @@
         <link href="/static/css/button.css" rel="stylesheet" type="text/css">
         <link href="/static/css/typography.css" rel="stylesheet" type="text/css">
         <link href="/static/css/login.css" rel="stylesheet" type="text/css">
+        <link href="/static/css/navigation.css" rel="stylesheet" type="text/css">
+        <link href="/static/css/sidebar.css" rel="stylesheet" type="text/css">
+        <link href="/static/css/content.css" rel="stylesheet" type="text/css">
+        <link href="/static/css/cards.css" rel="stylesheet" type="text/css">
+        <link href="/static/css/stocker.css" rel="stylesheet" type="text/css">
+        <link href="/static/css/properties.css" rel="stylesheet" type="text/css">
+        <link href="/static/css/message.css" rel="stylesheet" type="text/css">
+        <link href="/static/css/dialog.css" rel="stylesheet" type="text/css">
 
         <script src="/static/lib/ui/loader.js"></script>
         <script>
@@ -31,7 +39,27 @@
         <template x-if="!$store.loaded">
             <creastina-loader></creastina-loader>
         </template>
-        <div id="app">
+        <template x-if="$store.loaded && $store.authentication.loggedIn">
+            <div class="creastina-header">
+                <nav class="creastina-navigation">
+                    <span class="creastina-navigation__title">Crafting</span>
+                    <a x-active-route="inventory" class="creastina-navigation__item" href="/inventory">Inventar</a>
+                    <a x-active-route="projects" class="creastina-navigation__item" href="/projects">Projekte</a>
+                    <a x-active-route="instructions" class="creastina-navigation__item"
+                       href="/instructions">Anleitung</a>
+                </nav>
+                <div class="creastina-search">
+                    <svg viewBox="0 0 24 24" class="creastina-search__icon">
+                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                              stroke-width="1.5" d="m17 17l4 4m-2-10a8 8 0 1 0-16 0a8 8 0 0 0 16 0"/>
+                    </svg>
+                    <input type="search" :placeholder="$store.search.placeholder" aria-label="Suche"
+                           x-model="$store.search.query" class="creastina-search__input"
+                           @keydown.enter="$store.search.search()">
+                </div>
+            </div>
+        </template>
+        <div id="app" class="creastina-app">
             <template
                     x-route="/login"
                     x-handler="[$store.authentication.needsLogout, $store.navigation.fetchScript]"

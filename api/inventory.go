@@ -152,11 +152,14 @@ func createInventoryItem(w http.ResponseWriter, r *http.Request) {
 	}
 
 	body := struct {
-		Name       string            `json:"name"`
-		Note       string            `json:"note"`
-		Count      int               `json:"count"`
-		Unit       string            `json:"unit"`
-		Properties map[string]string `json:"properties"`
+		Name       string `json:"name"`
+		Note       string `json:"note"`
+		Count      int    `json:"count"`
+		Unit       string `json:"unit"`
+		Properties []struct {
+			Key   string `json:"key"`
+			Value string `json:"value"`
+		} `json:"properties"`
 	}{}
 	if err := decoder.Decode(&body); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -166,13 +169,18 @@ func createInventoryItem(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	properties := make(map[string]string)
+	for _, property := range body.Properties {
+		properties[property.Key] = property.Value
+	}
+
 	item := database.InventoryItem{
 		Name:       body.Name,
 		Note:       body.Note,
 		Count:      body.Count,
 		Unit:       body.Unit,
 		BoxId:      boxId,
-		Properties: body.Properties,
+		Properties: properties,
 	}
 
 	result, err := database.CreateInventoryItem(item)
@@ -213,11 +221,14 @@ func updateInventoryItem(w http.ResponseWriter, r *http.Request) {
 	}
 
 	body := struct {
-		Name       string            `json:"name"`
-		Note       string            `json:"note"`
-		Count      int               `json:"count"`
-		Unit       string            `json:"unit"`
-		Properties map[string]string `json:"properties"`
+		Name       string `json:"name"`
+		Note       string `json:"note"`
+		Count      int    `json:"count"`
+		Unit       string `json:"unit"`
+		Properties []struct {
+			Key   string `json:"key"`
+			Value string `json:"value"`
+		} `json:"properties"`
 	}{}
 	if err := decoder.Decode(&body); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -227,6 +238,11 @@ func updateInventoryItem(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	properties := make(map[string]string)
+	for _, property := range body.Properties {
+		properties[property.Key] = property.Value
+	}
+
 	item := database.InventoryItem{
 		Id:         itemId,
 		Name:       body.Name,
@@ -234,7 +250,7 @@ func updateInventoryItem(w http.ResponseWriter, r *http.Request) {
 		Count:      body.Count,
 		Unit:       body.Unit,
 		BoxId:      boxId,
-		Properties: body.Properties,
+		Properties: properties,
 	}
 
 	err = database.UpdateInventoryItem(item)
@@ -279,6 +295,72 @@ func deleteInventoryItem(w http.ResponseWriter, r *http.Request) {
 			"error": err.Error(),
 		})
 		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func decreaseInventoryItemStock(w http.ResponseWriter, r *http.Request) {
+	encoder := json.NewEncoder(w)
+
+	vars := mux.Vars(r)
+	itemId, err := strconv.Atoi(vars["itemId"])
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		_ = encoder.Encode(map[string]string{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	boxId, err := strconv.Atoi(vars["boxId"])
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		_ = encoder.Encode(map[string]string{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	err = database.DecreaseStock(itemId, boxId)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		_ = encoder.Encode(map[string]string{
+			"error": err.Error(),
+		})
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func increaseInventoryItemStock(w http.ResponseWriter, r *http.Request) {
+	encoder := json.NewEncoder(w)
+
+	vars := mux.Vars(r)
+	itemId, err := strconv.Atoi(vars["itemId"])
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		_ = encoder.Encode(map[string]string{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	boxId, err := strconv.Atoi(vars["boxId"])
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		_ = encoder.Encode(map[string]string{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	err = database.IncreaseStock(itemId, boxId)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		_ = encoder.Encode(map[string]string{
+			"error": err.Error(),
+		})
 	}
 
 	w.WriteHeader(http.StatusNoContent)

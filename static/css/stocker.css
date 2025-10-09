@@ -1,0 +1,55 @@
+.creastina-stocker {
+  display: grid;
+  width: 100%;
+  grid-template-columns: auto 1fr auto;
+
+  span {
+    font: var(--regular-text);
+    background-color: var(--background-lighter-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 0.125rem solid var(--primary-color);
+    border-bottom: 0.125rem solid var(--primary-color);
+  }
+}
+
+.creastina-stocker__button {
+  background: var(--primary-color);
+  height: 1.5rem;
+  width: 1.75rem;
+  color: var(--background-color);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0.125rem solid var(--primary-color);
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &:first-child {
+    border-radius: 0.5rem 0 0 0.5rem;
+    border-right: none;
+  }
+
+  &:last-child {
+    border-radius: 0 0.5rem 0.5rem 0;
+    border-left: none;
+  }
+
+  &:disabled {
+    background: var(--background-lighter-color);
+    color: var(--text-color-40);
+    cursor: not-allowed;
+  }
+
+  &:hover {
+    background: var(--background-lighter-color);
+    color: var(--primary-color);
+  }
+
+  svg {
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+}

@@ -25,9 +25,11 @@ func SetupApiRouter(router *mux.Router) {
 		Subrouter()
 	inventoryBoxRouter.
 		Methods(http.MethodGet).
+		Path("").
 		HandlerFunc(getInventoryBoxes)
 	inventoryBoxRouter.
 		Methods(http.MethodPost).
+		Path("").
 		HandlerFunc(createInventoryBox)
 	inventoryBoxRouter.
 		Methods(http.MethodGet).
@@ -39,9 +41,11 @@ func SetupApiRouter(router *mux.Router) {
 		Subrouter()
 	inventoryItemRouter.
 		Methods(http.MethodGet).
+		Path("").
 		HandlerFunc(getInventoryItems)
 	inventoryItemRouter.
 		Methods(http.MethodPost).
+		Path("").
 		HandlerFunc(createInventoryItem)
 	inventoryItemRouter.
 		Methods(http.MethodGet).
@@ -55,15 +59,25 @@ func SetupApiRouter(router *mux.Router) {
 		Methods(http.MethodDelete).
 		Path("/{itemId}").
 		HandlerFunc(deleteInventoryItem)
+	inventoryItemRouter.
+		Methods(http.MethodPut).
+		Path("/{itemId}/stock").
+		HandlerFunc(increaseInventoryItemStock)
+	inventoryItemRouter.
+		Methods(http.MethodDelete).
+		Path("/{itemId}/stock").
+		HandlerFunc(decreaseInventoryItemStock)
 
 	projectCategoryRouter := projectBaseRouter.
 		PathPrefix("/category").
 		Subrouter()
 	projectCategoryRouter.
 		Methods(http.MethodGet).
+		Path("").
 		HandlerFunc(getProjectCategories)
 	projectCategoryRouter.
 		Methods(http.MethodPost).
+		Path("").
 		HandlerFunc(createProjectCategory)
 	projectCategoryRouter.
 		Methods(http.MethodGet).
@@ -75,9 +89,11 @@ func SetupApiRouter(router *mux.Router) {
 		Subrouter()
 	projectRouter.
 		Methods(http.MethodGet).
+		Path("").
 		HandlerFunc(getProjects)
 	projectRouter.
 		Methods(http.MethodPost).
+		Path("").
 		HandlerFunc(createProject)
 	projectRouter.
 		Methods(http.MethodGet).
@@ -102,6 +118,7 @@ func SetupApiRouter(router *mux.Router) {
 
 	instructionRouter.
 		Methods(http.MethodGet).
+		Path("").
 		HandlerFunc(getInstructions)
 	instructionRouter.
 		Methods(http.MethodGet).
@@ -125,9 +142,11 @@ func SetupApiRouter(router *mux.Router) {
 		Subrouter()
 	instructionStepRouter.
 		Methods(http.MethodGet).
+		Path("").
 		HandlerFunc(getInstructionSteps)
 	instructionStepRouter.
 		Methods(http.MethodPost).
+		Path("").
 		HandlerFunc(createInstructionStep)
 	instructionRouter.
 		Methods(http.MethodGet).

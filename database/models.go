@@ -10,7 +10,7 @@ type InventoryItem struct {
 	Id         int               `db:"id,primarykey,autoincrement" json:"id"`
 	Name       string            `db:"name,notnull" json:"name"`
 	Note       string            `db:"note" json:"note"`
-	Count      int               `db:"count,notnull,default:0" json:"count"`
+	Count      int               `db:"count,notnull" json:"count"`
 	Unit       string            `db:"unit,notnull" json:"unit"`
 	Properties map[string]string `db:"-" json:"properties"`
 }

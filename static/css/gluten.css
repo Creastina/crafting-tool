@@ -1,7 +1,7 @@
 @font-face {
-    font-family: Gluten;
-    src: url('/static/fonts/gluten.woff2') format('woff2');
-    font-weight: 100 900;
-    font-style: normal;
-    font-display: swap;
+  font-family: Gluten;
+  src: url('/static/fonts/gluten.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
 }

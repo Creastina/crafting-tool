@@ -1,5 +1,7 @@
 import Alpine from './alpine.js';
 import PineconeRouter from './pinecone-router.js';
+import Masonry from './alpine-masonry.js';
+import Focus from './alpine-focus.js';
 import * as client from './openid-client/index.js';
 
 let authenticationConfiguration = {
@@ -44,10 +46,6 @@ function setCodeVerifier(code) {
 
 function getCodeVerifier() {
   return localStorage.getItem('/creastina/crafting/login/code-verifier');
-}
-
-function deleteCodeVerifier() {
-  localStorage.removeItem('/creastina/crafting/login/code-verifier');
 }
 
 export async function needsLogin(context) {
@@ -208,8 +206,8 @@ function setupRouting(baseScriptPath, routerBasePath = '') {
 async function setupAlpine(alpine, defaultPage) {
   Alpine.directive('active-route', (el, { expression, modifiers }, { Alpine, effect }) => {
     effect(() => {
-      const { page, area } = Alpine.store('navigation');
-      if ((modifiers.includes('area') && area === expression) || (!modifiers.includes('area') && page === expression)) {
+      const { page } = Alpine.store('navigation');
+      if (page === expression) {
         el.classList.add('is--active');
       } else {
         el.classList.remove('is--active');
@@ -252,6 +250,19 @@ async function setupAlpine(alpine, defaultPage) {
       this.page = page;
     },
   });
+  Alpine.store('search', {
+    query: '',
+    placeholder: 'Suchen',
+    search() {
+      if (this.searchFunction instanceof Function) {
+        this.searchFunction(this.query);
+      }
+    },
+    searchFunction: null,
+    setSearch(search) {
+      this.search = search;
+    },
+  });
 }
 
 export async function setup({
@@ -267,6 +278,8 @@ export async function setup({
   window.Alpine = Alpine;
 
   Alpine.plugin(PineconeRouter);
+  Alpine.plugin(Masonry);
+  Alpine.plugin(Focus);
 
   if (openIdUrl && openIdClientId && openIdCallbackUrl) {
     setupAuthentication(openIdUrl, openIdClientId, openIdCallbackUrl);

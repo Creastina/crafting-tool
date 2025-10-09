@@ -1,0 +1,98 @@
+.creastina-header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.creastina-navigation {
+  background: var(--primary-color);
+  display: flex;
+  gap: 2rem;
+  padding: 1rem 1rem 0.5rem;
+  border-radius: 1rem;
+
+  &::selection {
+    background: var(--background-color);
+    color: var(--primary-color);
+  }
+}
+
+.creastina-navigation__title {
+  font: var(--menu-brand);
+  color: var(--background-color);
+  text-decoration: none;
+  margin-right: 0.5rem;
+
+  &::selection {
+    background: var(--background-color);
+    color: var(--primary-color);
+  }
+}
+
+.creastina-navigation__item {
+  font: var(--menu-item);
+  color: var(--background-color);
+  text-decoration: none;
+  position: relative;
+
+  &::selection {
+    background: var(--background-color);
+    color: var(--primary-color);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -0.5rem;
+    left: 50%;
+    transform: translateX(-75%) rotate(0deg);
+    display: block;
+    width: 3rem;
+    height: 3rem;
+    background-color: var(--primary-color);
+    border-bottom-right-radius: 1rem;
+    transition: all 0.3s;
+    transform-origin: bottom left;
+    z-index: -1;
+  }
+
+  &:hover,
+  &.is--active {
+    &::after {
+      transform: translateX(-75%) rotate(45deg);
+    }
+  }
+}
+
+.creastina-search {
+  display: flex;
+  gap: 1rem;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  border-radius: 1rem;
+  border: 0.125rem solid var(--text-color-40);
+  padding: 0.75rem 1rem 0.5rem;
+  width: 24rem;
+}
+
+.creastina-search__input {
+  background-color: var(--background-color);
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0;
+  box-shadow: none;
+  outline: none;
+  color: var(--text-color);
+  font: var(--regular-text);
+  width: 100%;
+
+  &::placeholder {
+    color: var(--text-color-40);
+  }
+}
+
+.creastina-search__icon {
+  color: var(--primary-color);
+  height: 1.5rem;
+  width: 1.5rem;
+}
