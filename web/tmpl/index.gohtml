@@ -55,7 +55,7 @@
                     </svg>
                     <input type="search" :placeholder="$store.search.placeholder" aria-label="Suche"
                            x-model="$store.search.query" class="creastina-search__input"
-                           @keydown.enter="$store.search.search()">
+                           @input="$store.search.search()">
                 </div>
             </div>
         </template>

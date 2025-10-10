@@ -17,8 +17,8 @@ Alpine.data('inventoryData', () => ({
   getStockText(item) {
     return `${item.count} ${item.unit}`;
   },
-  async searchBox(query) {
-    const lowerQuery = query.toLowerCase();
+  searchBox() {
+    const lowerQuery = Alpine.store('search').query.toLowerCase();
     this.filteredBoxContent = this.boxContent.filter(
       (item) =>
         item.name.toLowerCase().includes(lowerQuery) ||
