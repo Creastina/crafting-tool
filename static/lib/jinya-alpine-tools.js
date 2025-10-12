@@ -10,7 +10,7 @@ let authenticationConfiguration = {
   openIdClientId: '',
   openIdCallbackUrl: '',
 };
-let scriptBasePath = '/static/js/';
+let scriptBasePath = '/static/js';
 let languages = {};
 
 export function setRedirect(redirect) {

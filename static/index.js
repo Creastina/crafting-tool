@@ -5,8 +5,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     defaultPage: 'inventory',
     baseScriptPath: '/static/js/',
     routerBasePath: '/',
-    openIdClientId: window.jewelsConfig.openIdClientId,
-    openIdUrl: window.jewelsConfig.openIdUrl,
-    openIdCallbackUrl: window.jewelsConfig.openIdCallbackUrl,
+    openIdClientId: window.creastinaConfig.openIdClientId,
+    openIdUrl: window.creastinaConfig.openIdUrl,
+    openIdCallbackUrl: window.creastinaConfig.openIdCallbackUrl,
   });
 });
