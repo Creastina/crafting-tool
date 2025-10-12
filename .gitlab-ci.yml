@@ -129,7 +129,7 @@ trigger-staging-server:
   needs:
     - job: merge-manifests-staging
   variables:
-    TAG: $CI_PIPELINE_IID-staging
+    STAGING_TAG: $CI_PIPELINE_IID-staging
   stage: deploy
   trigger: server-management/main-server.ulbricht.casa/crafting.creastina.art
   rules:
