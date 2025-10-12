@@ -3,6 +3,10 @@
   grid-template-columns: minmax(5rem, auto) minmax(15rem, 1fr);
   gap: 0.5rem;
   align-items: center;
+
+  &.is--one-column {
+    grid-template-columns: 1fr;
+  }
 }
 
 .creastina-input {

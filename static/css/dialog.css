@@ -2,7 +2,7 @@
   display: flex;
   position: absolute;
   inset: 0;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px); /* stylelint-disable-line unit-allowed-list */
   justify-content: center;
   align-items: center;
 }

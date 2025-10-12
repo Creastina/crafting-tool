@@ -1,4 +1,4 @@
-import { CloseEvent } from '../closeEvent.js';
+import { CloseEvent } from '../close-event.js';
 import { post } from '../../lib/jinya-http.js';
 
 class BoxCreatedEvent extends Event {

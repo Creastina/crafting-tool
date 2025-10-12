@@ -1,4 +1,4 @@
-import { CloseEvent } from '../closeEvent.js';
+import { CloseEvent } from '../close-event.js';
 import { put } from '../../lib/jinya-http.js';
 
 class ItemUpdatedEvent extends Event {
@@ -122,7 +122,7 @@ class UpdateItemElement extends HTMLElement {
 
       try {
         await put(`/api/inventory/box/${boxId}/item/${this.getAttribute('item-id')}`, Alpine.raw(data));
-        this.dispatchEvent(new ItemUpdatedEvent(name));
+        this.dispatchEvent(new ItemUpdatedEvent(data));
       } catch (e) {
         inventoryData.hasError = true;
       }

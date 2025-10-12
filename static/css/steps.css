@@ -1,0 +1,15 @@
+.creastina-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: start;
+}
+
+.creastina-steps__check {
+  color: var(--accent-1-color);
+}
+
+.creastina-steps__step-text {
+  color: var(--text-color);
+  font: var(--regular-text);
+}

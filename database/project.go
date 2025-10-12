@@ -24,7 +24,7 @@ func GetProject(projectId, categoryId int) (*Project, error) {
 
 	project.fillInventoryItems()
 
-	return &project, nil
+	return project, nil
 }
 
 func CreateProject(project Project, inventoryItems []int) (*Project, error) {

@@ -78,9 +78,18 @@ type Instruction struct {
 	Note string `db:"note" json:"note"`
 }
 
+type InstructionWithStepCount struct {
+	Id             int    `db:"id,primarykey,autoincrement" json:"id"`
+	Name           string `db:"name,notnull" json:"name"`
+	Note           string `db:"note" json:"note"`
+	DoneStepCount  int    `db:"done_step_count" json:"doneStepCount"`
+	TotalStepCount int    `db:"total_step_count" json:"totalStepCount"`
+}
+
 type InstructionStep struct {
 	InstructionId int    `db:"instruction_id" json:"-"`
 	Id            int    `db:"id,primarykey,autoincrement" json:"id"`
 	Description   string `db:"description,notnull" json:"description"`
 	Done          bool   `db:"done" json:"done"`
+	Position      int    `db:"position" json:"-"`
 }

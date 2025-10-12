@@ -121,6 +121,10 @@ func SetupApiRouter(router *mux.Router) {
 		Path("").
 		HandlerFunc(getInstructions)
 	instructionRouter.
+		Methods(http.MethodPost).
+		Path("").
+		HandlerFunc(createInstruction)
+	instructionRouter.
 		Methods(http.MethodGet).
 		Path("/{instructionId}").
 		HandlerFunc(getInstruction)
@@ -138,7 +142,7 @@ func SetupApiRouter(router *mux.Router) {
 		HandlerFunc(replaceSteps)
 
 	instructionStepRouter := instructionRouter.
-		Path("/{instructionId}/step").
+		PathPrefix("/{instructionId}/step").
 		Subrouter()
 	instructionStepRouter.
 		Methods(http.MethodGet).
@@ -148,23 +152,23 @@ func SetupApiRouter(router *mux.Router) {
 		Methods(http.MethodPost).
 		Path("").
 		HandlerFunc(createInstructionStep)
-	instructionRouter.
+	instructionStepRouter.
 		Methods(http.MethodGet).
 		Path("/{stepId}").
 		HandlerFunc(getInstructionStep)
-	instructionRouter.
+	instructionStepRouter.
 		Methods(http.MethodPut).
 		Path("/{stepId}").
 		HandlerFunc(updateInstructionStep)
-	instructionRouter.
+	instructionStepRouter.
 		Methods(http.MethodDelete).
 		Path("/{stepId}").
 		HandlerFunc(deleteInstructionStep)
-	instructionRouter.
+	instructionStepRouter.
 		Methods(http.MethodPut).
 		Path("/{stepId}/done").
 		HandlerFunc(markInstructionStepAsDone)
-	instructionRouter.
+	instructionStepRouter.
 		Methods(http.MethodDelete).
 		Path("/{stepId}/done").
 		HandlerFunc(markInstructionStepAsTodo)

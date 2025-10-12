@@ -1,14 +1,14 @@
 package database
 
-func GetInstructions() ([]Instruction, error) {
-	return Select[Instruction]("select * from instruction order by name")
+func GetInstructions() ([]InstructionWithStepCount, error) {
+	return Select[InstructionWithStepCount]("select * from instruction_with_step_count")
 }
 
-func GetInstruction(id int) (*Instruction, error) {
-	return Get[Instruction](id)
+func GetInstruction(id int) (*InstructionWithStepCount, error) {
+	return SelectOne[InstructionWithStepCount]("select * from instruction_with_step_count where id = $1", id)
 }
 
-func CreateInstruction(instruction Instruction, steps []string) (*Instruction, error) {
+func CreateInstruction(instruction Instruction, steps []string) (*InstructionWithStepCount, error) {
 	tx, err := dbMap.Begin()
 	if err != nil {
 		return nil, err
@@ -20,11 +20,12 @@ func CreateInstruction(instruction Instruction, steps []string) (*Instruction, e
 		return nil, err
 	}
 
-	for _, step := range steps {
+	for i, step := range steps {
 		instructionStep := InstructionStep{
 			InstructionId: instruction.Id,
 			Description:   step,
 			Done:          false,
+			Position:      i,
 		}
 
 		err = tx.Insert(&instructionStep)
@@ -66,9 +67,9 @@ func ReplaceInstructionSteps(id int, steps []InstructionStep) error {
 		return err
 	}
 
-	for _, step := range steps {
+	for i, step := range steps {
 		_, err = tx.Exec(`
-insert into instruction_step (instruction_id, description, done) values ($1, $2, $3)`, id, step.Description, step.Done)
+insert into instruction_step (instruction_id, description, done, position) values ($1, $2, $3, $4)`, id, step.Description, step.Done, i)
 		if err != nil {
 			_ = tx.Rollback()
 			return err
@@ -83,12 +84,7 @@ func GetInstructionSteps(instructionId int) ([]InstructionStep, error) {
 }
 
 func GetInstructionStep(stepId, instructionId int) (*InstructionStep, error) {
-	step, err := SelectOne[InstructionStep]("select * from instruction_step where id = $1 instruction_id = $2", stepId, instructionId)
-	if err != nil {
-		return nil, err
-	}
-
-	return &step, nil
+	return SelectOne[InstructionStep]("select * from instruction_step where id = $1 instruction_id = $2", stepId, instructionId)
 }
 
 func CreateInstructionStep(instructionStep InstructionStep) (*InstructionStep, error) {

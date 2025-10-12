@@ -172,13 +172,11 @@ func replaceSteps(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	body := struct {
-		Steps []struct {
-			Id          int    `json:"id"`
-			Description string `json:"description"`
-			Done        bool   `json:"done"`
-		} `json:"steps"`
-	}{}
+	var body []struct {
+		Id          int    `json:"id"`
+		Description string `json:"description"`
+		Done        bool   `json:"done"`
+	}
 
 	err = decoder.Decode(&body)
 	if err != nil {
@@ -189,8 +187,8 @@ func replaceSteps(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	instructionSteps := make([]database.InstructionStep, len(body.Steps))
-	for i, step := range body.Steps {
+	instructionSteps := make([]database.InstructionStep, len(body))
+	for i, step := range body {
 		instructionSteps[i] = database.InstructionStep{
 			Id:            step.Id,
 			InstructionId: instructionId,

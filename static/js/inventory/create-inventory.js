@@ -1,4 +1,4 @@
-import { CloseEvent } from '../closeEvent.js';
+import { CloseEvent } from '../close-event.js';
 import { post } from '../../lib/jinya-http.js';
 
 class ItemCreatedEvent extends Event {
@@ -118,7 +118,7 @@ class CreateItemElement extends HTMLElement {
 
       try {
         await post(`/api/inventory/box/${boxId}/item`, Alpine.raw(data));
-        this.dispatchEvent(new ItemCreatedEvent(name));
+        this.dispatchEvent(new ItemCreatedEvent(data));
       } catch (e) {
         inventoryData.hasError = true;
       }

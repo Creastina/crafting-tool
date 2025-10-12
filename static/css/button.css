@@ -58,4 +58,44 @@
       width: 1.5rem;
     }
   }
+
+  &.is--step {
+    background: none;
+    color: var(--accent-1-color);
+    height: 1.5rem;
+    padding: 0;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+
+    svg {
+      height: 1.5rem;
+      width: 1.5rem;
+    }
+
+    .creastina-steps__checkmark {
+      transition: opacity 0.3s;
+    }
+
+    &.is--todo {
+      .creastina-steps__checkmark {
+        opacity: 0;
+      }
+    }
+
+    &.is--done {
+      .creastina-steps__checkmark {
+        opacity: 1;
+      }
+    }
+
+    &:hover {
+      background: none;
+      filter: none;
+
+      .creastina-steps__checkmark {
+        opacity: 0.5;
+      }
+    }
+  }
 }

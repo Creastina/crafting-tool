@@ -46,8 +46,6 @@ func SetupDatabase() {
 			panic(err)
 		}
 
-		AddTableWithName[InventoryItemWithProjectCount]("inventory_item_with_count")
-
 		_, err = conn.Exec(`
 create or replace function add_foreign_key_if_not_exists(from_table text, from_column text, to_table text, to_column text)
 returns void language plpgsql as
@@ -96,12 +94,25 @@ drop table if exists seaql_migrations`)
 
 		_, err = conn.Exec(`
 create or replace view inventory_item_with_count as
-select *,
-       (select count(p.*)
-        from project p
-                 inner join project_inventory_item pii on p.id = pii.project_id
-        where pii.inventory_item_id = i.id) as project_count
-from inventory_item i;
+select i.*, count(distinct pii.project_id) as project_count
+from inventory_item i
+         full join project_inventory_item pii on i.id = pii.inventory_item_id
+group by i.id, i.name
+order by i.name;
+`)
+		if err != nil {
+			panic(err)
+		}
+
+		_, err = conn.Exec(`
+create or replace view instruction_with_step_count as
+select i.*,
+       count(s.*) filter ( where done = true )                 as done_step_count,
+       count(s.*) filter ( where done = false or done = true ) as total_step_count
+from instruction i
+         inner join instruction_step s on i.id = s.instruction_id
+group by i.id, i.name
+order by i.name;
 `)
 		if err != nil {
 			panic(err)
