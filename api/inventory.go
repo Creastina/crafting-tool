@@ -365,3 +365,20 @@ func increaseInventoryItemStock(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusNoContent)
 }
+
+func searchInventory(w http.ResponseWriter, r *http.Request) {
+	encoder := json.NewEncoder(w)
+
+	query := r.URL.Query().Get("query")
+
+	items, err := database.SearchInventoryItems(query)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		_ = encoder.Encode(map[string]string{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	_ = encoder.Encode(items)
+}

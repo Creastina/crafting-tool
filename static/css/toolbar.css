@@ -1,0 +1,30 @@
+.creastina-toolbar {
+  display: flex;
+
+  .creastina-button {
+    border-radius: 0;
+
+    &:not(.is--primary) {
+      background: var(--background-color);
+      border-left: 0.125rem solid var(--primary-color);
+      border-right: 0.125rem solid var(--primary-color);
+    }
+
+    &:first-child {
+      border-top-left-radius: 0.5rem;
+      border-bottom-left-radius: 0.5rem;
+      border: 0;
+    }
+
+    &:last-child {
+      border-top-right-radius: 0.5rem;
+      border-bottom-right-radius: 0.5rem;
+      border: 0;
+    }
+
+    &.is--toggled {
+      background-color: var(--accent-1-color);
+      color: var(--background-color);
+    }
+  }
+}

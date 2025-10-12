@@ -1,0 +1,92 @@
+.creastina-project__inventory {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+
+  li {
+    list-style: none;
+    margin: 0;
+    width: 100%;
+    display: grid;
+    align-items: center;
+    grid-template:
+      "name button" auto
+      "sidenote sidenote" auto
+      / 1fr auto;
+    padding-bottom: 0.25rem;
+    padding-top: 0.25rem;
+    border-bottom: 0.125rem solid var(--accent-1-color);
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .creastina-button {
+      &.is--icon {
+        & svg {
+          height: 1rem;
+          width: 1rem;
+        }
+      }
+    }
+  }
+
+  &.is--card {
+    li {
+      grid-template:
+        "name" auto
+        "sidenote" auto
+        / 1fr;
+      border-bottom: none;
+    }
+  }
+}
+
+.creastina-search__list {
+  display: flex;
+  flex-direction: column;
+  background: var(--background-lighter-color);
+  border-radius: 0.75rem;
+  max-height: 12rem;
+  width: 15rem;
+}
+
+.creastina-search__item {
+  background: transparent;
+  border: none;
+  transition: all 0.3s;
+  border-radius: 0.75rem;
+  overflow: hidden;
+
+  &.is--button {
+    font: var(--regular-text);
+    color: var(--text-color);
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    outline: none;
+  }
+
+  &::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 0.125rem;
+    background: var(--accent-1-color);
+  }
+
+  &:last-child {
+    border-bottom: none;
+
+    &::after {
+      display: none;
+    }
+  }
+
+  &:hover {
+    background: var(--accent-2-color);
+  }
+}

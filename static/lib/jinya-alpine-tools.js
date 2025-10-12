@@ -1,7 +1,8 @@
 import Alpine from './alpine.js';
 import PineconeRouter from './pinecone-router.js';
-import Masonry from './alpine-masonry.js';
 import Focus from './alpine-focus.js';
+import Anchor from './alpine-anchor.js';
+import Collapse from './alpine-collapse.js';
 import * as client from './openid-client/index.js';
 
 let authenticationConfiguration = {
@@ -278,8 +279,9 @@ export async function setup({
   window.Alpine = Alpine;
 
   Alpine.plugin(PineconeRouter);
-  Alpine.plugin(Masonry);
   Alpine.plugin(Focus);
+  Alpine.plugin(Anchor);
+  Alpine.plugin(Collapse);
 
   if (openIdUrl && openIdClientId && openIdCallbackUrl) {
     setupAuthentication(openIdUrl, openIdClientId, openIdCallbackUrl);

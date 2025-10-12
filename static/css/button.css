@@ -28,6 +28,11 @@
     background-color: var(--background-color);
   }
 
+  &.is--toggled {
+    background-color: var(--accent-1-color);
+    color: var(--background-color);
+  }
+
   &.is--icon {
     padding: 0.25rem;
     border-radius: 0.5rem;

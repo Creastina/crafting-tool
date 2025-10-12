@@ -1,9 +1,9 @@
 import { CloseEvent } from '../close-event.js';
 import { post } from '../../lib/jinya-http.js';
 
-class BoxCreatedEvent extends Event {
+class CategoryCreatedEvent extends Event {
   constructor(name) {
-    super('box-created', {
+    super('category-created', {
       bubbles: true,
       cancelable: false,
       composed: true,
@@ -12,7 +12,7 @@ class BoxCreatedEvent extends Event {
   }
 }
 
-class CreateBoxElement extends HTMLElement {
+class CreateCategoryElement extends HTMLElement {
   constructor() {
     super();
 
@@ -31,7 +31,7 @@ class CreateBoxElement extends HTMLElement {
       <div class="creastina-dialog__container">
         <div class="creastina-dialog">
           <header class="creastina-dialog__header">
-            <h1 class="creastina-dialog__title">Neue Box</h1>
+            <h1 class="creastina-dialog__title">Neue Kategorie</h1>
           </header>
           <form class="creastina-dialog__content">
             <div id="message" class="creastina-message is--negative is--hidden">
@@ -43,7 +43,7 @@ class CreateBoxElement extends HTMLElement {
             </div>
             <div class="creastina-dialog__buttons">
               <button id="close" type="button" class="creastina-button">Nevermind</button>
-              <button id="save" type="submit" class="creastina-button is--primary">Box erstellen</button>
+              <button id="save" type="submit" class="creastina-button is--primary">Kategorie erstellen</button>
             </div>
           </form>
         </div>
@@ -58,8 +58,8 @@ class CreateBoxElement extends HTMLElement {
       const name = this.root.getElementById('name').value;
 
       try {
-        await post('/api/inventory/box', { name });
-        this.dispatchEvent(new BoxCreatedEvent(name));
+        await post('/api/project/category', { name });
+        this.dispatchEvent(new CategoryCreatedEvent(name));
       } catch (e) {
         this.root.getElementById('message').classList.remove('is--hidden');
       }
@@ -67,16 +67,16 @@ class CreateBoxElement extends HTMLElement {
   }
 }
 
-if (!customElements.get('creastina-create-box')) {
-  customElements.define('creastina-create-box', CreateBoxElement);
+if (!customElements.get('creastina-create-category')) {
+  customElements.define('creastina-create-category', CreateCategoryElement);
 }
 
-export async function createBox() {
+export async function createCategory() {
   return new Promise((resolve) => {
-    const container = document.createElement('creastina-create-box');
+    const container = document.createElement('creastina-create-category');
     document.body.appendChild(container);
 
-    container.addEventListener('box-created', (e) => {
+    container.addEventListener('category-created', (e) => {
       resolve(e.name);
       container.remove();
     });

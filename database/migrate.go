@@ -36,7 +36,8 @@ func SetupDatabase() {
 		AddTableWithName[ProjectCategory]("project_category")
 		AddTableWithName[Project]("project").
 			SetUniqueTogether("category_id", "name")
-		AddTableWithName[ProjectInventoryItem]("project_inventory_item")
+		AddTableWithName[ProjectInventoryItem]("project_inventory_item").
+			SetUniqueTogether("project_id", "inventory_item_id")
 
 		AddTableWithName[Instruction]("instruction")
 		AddTableWithName[InstructionStep]("instruction_step")

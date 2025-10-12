@@ -20,6 +20,11 @@ func SetupApiRouter(router *mux.Router) {
 		PathPrefix("/instruction").
 		Subrouter()
 
+	inventoryRouter.
+		Path("/search").
+		Methods(http.MethodGet).
+		HandlerFunc(searchInventory)
+
 	inventoryBoxRouter := inventoryRouter.
 		PathPrefix("/box").
 		Subrouter()
@@ -83,6 +88,10 @@ func SetupApiRouter(router *mux.Router) {
 		Methods(http.MethodGet).
 		Path("/{categoryId}").
 		HandlerFunc(getProjectCategory)
+	projectCategoryRouter.
+		Methods(http.MethodPut).
+		Path("/{categoryId}/archive").
+		HandlerFunc(archiveCategory)
 
 	projectRouter := projectCategoryRouter.
 		PathPrefix("/{categoryId}/project").

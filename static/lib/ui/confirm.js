@@ -30,7 +30,7 @@ export default async function confirm({
             <p class="creastina-dialog__message">${message}</p>
             <div class="creastina-dialog__buttons">
                 <button data-action="decline" class="creastina-button">${declineLabel}</button>
-                <button data-action="approve" class="creastina-button ${negative ? 'is--negative' : ''} ${warning ? 'is--warning' : ''}">${approveLabel}</button>
+                <button data-action="approve" class="creastina-button ${!(negative && warning) ? 'is--primary' : ''} ${negative ? 'is--negative' : ''} ${warning ? 'is--warning' : ''}">${approveLabel}</button>
             </div>
           </div>
         </div>

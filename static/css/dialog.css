@@ -46,3 +46,7 @@
   gap: 1rem;
   justify-content: end;
 }
+
+.creastina-dialog__message {
+  margin: 0;
+}

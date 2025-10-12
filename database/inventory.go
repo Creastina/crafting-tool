@@ -2,6 +2,27 @@ package database
 
 import "encoding/json"
 
+func SearchInventoryItems(query string) ([]InventoryItemWithBoxName, error) {
+	items, err := Select[InventoryItemWithBoxName](`select ii.*, ib.name as box_name
+from inventory_item ii
+         full join inventory_item_property iip on ii.id = iip.inventory_item_id
+         inner join inventory_box ib on ii.box_id = ib.id
+where ii.name ilike $1
+   or ii.note ilike $1
+   or iip.value ilike $1
+order by ii.name`, "%"+query+"%")
+	if err != nil {
+		return nil, err
+	}
+
+	for i, item := range items {
+		item.fillProperties()
+		items[i] = item
+	}
+
+	return items, nil
+}
+
 func GetInventoryItems(boxId int) ([]InventoryItemWithProjectCount, error) {
 	items, err := Select[InventoryItemWithProjectCount]("select * from inventory_item_with_count where box_id = $1", boxId)
 	if err != nil {

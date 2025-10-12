@@ -61,7 +61,7 @@ class UpdateItemElement extends HTMLElement {
       <div class="creastina-dialog__container" id="dialog" x-data='updateInventoryItem(${this.getAttribute('item')})'>
         <div class="creastina-dialog">
           <header class="creastina-dialog__header">
-            <h1 class="creastina-dialog__title" x-text="name + ' bearbeiten'"></h1>
+            <h1 class="creastina-dialog__title">${this.getAttribute('name')} bearbeiten</h1>
           </header>
           <form class="creastina-dialog__content">
             <div id="message" class="creastina-message is--negative" :class="{ 'is--hidden': !hasError }">
@@ -139,6 +139,7 @@ if (!customElements.get('creastina-update-inventory-item')) {
 export async function updateInventoryItem(boxId, item) {
   return new Promise((resolve) => {
     const container = document.createElement('creastina-update-inventory-item');
+    container.setAttribute('name', item.name);
     container.setAttribute('item', JSON.stringify(item));
     container.setAttribute('item-id', item.id);
     container.setAttribute('box-id', boxId);

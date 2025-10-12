@@ -20,7 +20,12 @@ type InventoryItemWithProjectCount struct {
 	ProjectCount int `db:"project_count" json:"projectCount"`
 }
 
-func (i *InventoryItemWithProjectCount) fillProperties() {
+type InventoryItemWithBoxName struct {
+	InventoryItem
+	BoxName string `db:"box_name" json:"boxName"`
+}
+
+func (i *InventoryItem) fillProperties() {
 	props, err := Select[InventoryItemProperty]("select * from inventory_item_property where inventory_item_id = $1", i.Id)
 	if err != nil {
 		return

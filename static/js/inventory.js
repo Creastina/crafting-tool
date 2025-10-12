@@ -27,14 +27,14 @@ Alpine.data('inventoryData', () => ({
     );
   },
   async init() {
-    await this.loadBoxes();
+    await this.loadCategories();
     if (this.boxes.length > 0) {
       await this.selectBox(this.boxes[0]);
     }
     Alpine.store('search').setSearch(this.searchBox.bind(this));
     this.loading = false;
   },
-  async loadBoxes() {
+  async loadCategories() {
     this.boxes = await get('/api/inventory/box');
   },
   async selectBox(box) {
@@ -42,10 +42,10 @@ Alpine.data('inventoryData', () => ({
     this.boxContent = await get(`/api/inventory/box/${box.id}/item`);
     this.filteredBoxContent = this.boxContent;
   },
-  async createBox() {
+  async createProject() {
     const newBoxName = await createBox();
     if (newBoxName) {
-      await this.loadBoxes();
+      await this.loadCategories();
       const newBox = this.boxes.find((box) => box.name === newBoxName);
       await this.selectBox(newBox);
     }
@@ -74,7 +74,7 @@ Alpine.data('inventoryData', () => ({
       } catch (e) {
         alert({
           title: 'Fehler beim Löschen',
-          message: `Beim Löschen der Sache von ${item.name} ist ein Fehler aufgetreten.`,
+          message: `Beim Löschen der Sache "${item.name}" ist ein Fehler aufgetreten.`,
           closeLabel: 'Verdammt',
           negative: true,
         });
@@ -88,7 +88,7 @@ Alpine.data('inventoryData', () => ({
     } catch (e) {
       alert({
         title: 'Fehler beim Erhöhen',
-        message: `Beim Erhöhen des Inventars von ${item.name}`,
+        message: `Beim Erhöhen des Inventars von "${item.name}"`,
         closeLabel: 'Verdammt',
         negative: true,
       });
@@ -101,7 +101,7 @@ Alpine.data('inventoryData', () => ({
     } catch (e) {
       alert({
         title: 'Fehler beim Verringern',
-        message: `Beim Verringern des Inventars von ${item.name}`,
+        message: `Beim Verringern des Inventars von "${item.name}"`,
         closeLabel: 'Verdammt',
         negative: true,
       });

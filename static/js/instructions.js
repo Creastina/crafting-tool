@@ -52,7 +52,7 @@ Alpine.data('instructionsData', () => ({
       } catch (e) {
         alert({
           title: 'Fehler beim Löschen',
-          message: `Beim Löschen der Anleitung von ${instruction.name} ist ein Fehler aufgetreten.`,
+          message: `Beim Löschen der Anleitung "${instruction.name}" ist ein Fehler aufgetreten.`,
           closeLabel: 'Verdammt',
           negative: true,
         });

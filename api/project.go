@@ -80,10 +80,34 @@ func createProjectCategory(w http.ResponseWriter, r *http.Request) {
 	_ = encoder.Encode(projectCategory)
 }
 
-func getProjects(w http.ResponseWriter, r *http.Request) {
+func archiveCategory(w http.ResponseWriter, r *http.Request) {
 	encoder := json.NewEncoder(w)
 
-	isArchived := r.URL.Query().Get("archived") == "true"
+	vars := mux.Vars(r)
+
+	categoryId, err := strconv.Atoi(vars["categoryId"])
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		_ = encoder.Encode(map[string]string{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	err = database.ArchiveCategory(categoryId)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		_ = encoder.Encode(map[string]string{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func getProjects(w http.ResponseWriter, r *http.Request) {
+	encoder := json.NewEncoder(w)
 
 	vars := mux.Vars(r)
 	categoryId, err := strconv.Atoi(vars["categoryId"])
@@ -95,7 +119,7 @@ func getProjects(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	projects, err := database.GetProjects(categoryId, isArchived)
+	projects, err := database.GetProjects(categoryId)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		_ = encoder.Encode(map[string]string{

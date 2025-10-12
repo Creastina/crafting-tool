@@ -2,8 +2,8 @@ package database
 
 import "encoding/json"
 
-func GetProjects(categoryId int, isArchived bool) ([]Project, error) {
-	projects, err := Select[Project]("select * from project where category_id = $1 and is_archived = $2", categoryId, isArchived)
+func GetProjects(categoryId int) ([]Project, error) {
+	projects, err := Select[Project]("select * from project where category_id = $1", categoryId)
 	if err != nil {
 		return nil, err
 	}
@@ -80,13 +80,12 @@ func UpdateProject(project Project, inventoryItems []int) error {
 		//language=postgresql
 		_, err = tx.Exec(`
 with incoming(data) as (values ($2::jsonb)),
-     parsed as (select $1::int as project_id, (jsonb_array_elements_text(data))::int as inventory_item_id
-                from incoming),
+     parsed as (select (jsonb_array_elements_text(data))::int as inventory_item_id from incoming),
      upserted as (
          insert into project_inventory_item (project_id, inventory_item_id)
-             select project_id, inventory_item_id from parsed
+             select $1, inventory_item_id from parsed
              on conflict (inventory_item_id, project_id) do nothing
-             returning inventory_item_id, project_id)
+             returning inventory_item_id)
 delete
 from project_inventory_item
 where project_id = $1
@@ -105,5 +104,10 @@ where project_id = $1
 
 func DeleteProject(projectId, categoryId int) error {
 	_, err := dbMap.Exec("delete from project where id = $1 and category_id = $2", projectId, categoryId)
+	return err
+}
+
+func ArchiveCategory(categoryId int) error {
+	_, err := dbMap.Exec("update project set is_archived = true where category_id = $1", categoryId)
 	return err
 }
