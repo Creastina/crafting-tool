@@ -93,7 +93,7 @@ merge-manifests-staging:
   stage: deploy
   extends: .base-docker
   needs:
-    - job: docker-build
+    - job: docker-build-staging
       artifacts: false
   script:
     - buildah manifest create $FQ_IMAGE_NAME
@@ -125,6 +125,16 @@ merge-manifests:
   rules:
     - if: $CI_COMMIT_TAG
 
+trigger-staging-server:
+  needs:
+    - job: merge-manifests-staging
+  variables:
+    TAG: $CI_PIPELINE_IID-staging
+  stage: deploy
+  trigger: server-management/main-server.ulbricht.casa/crafting.creastina.art
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+
 trigger-server:
   needs:
     - job: merge-manifests
@@ -134,13 +144,3 @@ trigger-server:
   trigger: server-management/main-server.ulbricht.casa/crafting.creastina.art
   rules:
     - if: $CI_COMMIT_TAG
-
-trigger-staging-server:
-  needs:
-    - job: merge-manifests
-  variables:
-    TAG: $CI_COMMIT_TAG
-  stage: deploy
-  trigger: server-management/main-server.ulbricht.casa/crafting.creastina.art
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main"
