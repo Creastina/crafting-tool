@@ -42,7 +42,7 @@ Alpine.data('inventoryData', () => ({
     this.boxContent = await get(`/api/inventory/box/${box.id}/item`);
     this.filteredBoxContent = this.boxContent;
   },
-  async createProject() {
+  async createBox() {
     const newBoxName = await createBox();
     if (newBoxName) {
       await this.loadCategories();
