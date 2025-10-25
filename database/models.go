@@ -26,12 +26,13 @@ type InventoryItemWithBoxName struct {
 }
 
 func (i *InventoryItem) fillProperties() {
+	i.Properties = make(map[string]string)
+
 	props, err := Select[InventoryItemProperty]("select * from inventory_item_property where inventory_item_id = $1", i.Id)
 	if err != nil {
 		return
 	}
 
-	i.Properties = make(map[string]string)
 	for _, prop := range props {
 		i.Properties[prop.Name] = prop.Value
 	}

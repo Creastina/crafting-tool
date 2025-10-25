@@ -3,7 +3,7 @@ package database
 import "encoding/json"
 
 func SearchInventoryItems(query string) ([]InventoryItemWithBoxName, error) {
-	items, err := Select[InventoryItemWithBoxName](`select ii.*, ib.name as box_name
+	items, err := Select[InventoryItemWithBoxName](`select distinct ii.*, ib.name as box_name
 from inventory_item ii
          full join inventory_item_property iip on ii.id = iip.inventory_item_id
          inner join inventory_box ib on ii.box_id = ib.id

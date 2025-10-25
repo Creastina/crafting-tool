@@ -328,7 +328,7 @@ func archiveProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = database.GetDbMap().Exec("update project set is_archived = true where id = $1 and category_id = $2", projectId, categoryId)
+	err = database.ArchiveProject(projectId, categoryId)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		_ = encoder.Encode(map[string]string{

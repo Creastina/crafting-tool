@@ -109,5 +109,47 @@ func DeleteProject(projectId, categoryId int) error {
 
 func ArchiveCategory(categoryId int) error {
 	_, err := dbMap.Exec("update project set is_archived = true where category_id = $1", categoryId)
+	if err != nil {
+		return err
+	}
+
+	//language=postgresql
+	_, err = dbMap.Exec(`
+with inventory as (
+	select ii.id, count(ii)
+	from inventory_item ii
+		join project_inventory_item pii on pii.inventory_item_id = ii.id
+		join project p on p.id = pii.project_id
+	where ii.count > 0 and p.category_id = 1
+	group by ii.id
+)
+update inventory_item ii
+set count = ii.count - inventory.count
+from inventory
+where ii.id = inventory.id`, categoryId)
+
+	return err
+}
+
+func ArchiveProject(projectId, categoryId int) error {
+	_, err := dbMap.Exec("update project set is_archived = true where id = $1 and category_id = $2", projectId, categoryId)
+	if err != nil {
+		return err
+	}
+
+	//language=postgresql
+	_, err = dbMap.Exec(`
+with inventory as (
+    select ii.id, count(ii)
+        from inventory_item ii
+    join project_inventory_item pii on pii.inventory_item_id = ii.id
+    where ii.count > 0 and pii.project_id = $1
+    group by ii.id
+)
+update inventory_item ii
+set count = ii.count - inventory.count
+from inventory
+where ii.id = inventory.id`, projectId)
+
 	return err
 }
