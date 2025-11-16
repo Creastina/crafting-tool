@@ -84,7 +84,7 @@ class UpdateProjectElement extends HTMLElement {
               <p x-text="errorMessage"></p>
             </div>
             <div class="creastina-form">
-              <label for="name" class="creastina-form__label">Sache</label>
+              <label for="name" class="creastina-form__label">Projekt</label>
               <input id="name" x-model="name" type="text" class="creastina-input" required>
               <label for="note" class="creastina-form__label">Notiz</label>
               <input id="note" x-model="note" type="text" class="creastina-input">
