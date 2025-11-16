@@ -181,9 +181,9 @@ func createProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	body := struct {
-		Name           string `json:"name"`
-		Note           string `json:"note"`
-		InventoryItems []int  `json:"inventoryItems"`
+		Name           string      `json:"name"`
+		Note           string      `json:"note"`
+		InventoryItems map[int]int `json:"inventoryItems"`
 	}{}
 	if err := decoder.Decode(&body); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -236,10 +236,10 @@ func updateProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	body := struct {
-		Name           string `json:"name"`
-		Note           string `json:"note"`
-		InventoryItems []int  `json:"inventoryItems"`
-		IsArchived     bool   `json:"isArchived"`
+		Name           string      `json:"name"`
+		Note           string      `json:"note"`
+		InventoryItems map[int]int `json:"inventoryItems"`
+		IsArchived     bool        `json:"isArchived"`
 	}{}
 
 	if err := decoder.Decode(&body); err != nil {

@@ -118,5 +118,13 @@ order by i.name;
 		if err != nil {
 			panic(err)
 		}
+
+		_, err = conn.Exec(`
+alter table project_inventory_item 
+    add column if not exists count int default 0
+`)
+		if err != nil {
+			panic(err)
+		}
 	}
 }

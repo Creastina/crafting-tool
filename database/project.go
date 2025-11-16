@@ -27,7 +27,7 @@ func GetProject(projectId, categoryId int) (*Project, error) {
 	return project, nil
 }
 
-func CreateProject(project Project, inventoryItems []int) (*Project, error) {
+func CreateProject(project Project, inventoryItems map[int]int) (*Project, error) {
 	tx, err := dbMap.Begin()
 	if err != nil {
 		return nil, err
@@ -39,10 +39,11 @@ func CreateProject(project Project, inventoryItems []int) (*Project, error) {
 		return nil, err
 	}
 
-	for _, inventoryItem := range inventoryItems {
+	for inventoryItem, count := range inventoryItems {
 		projectInventoryItem := ProjectInventoryItem{
 			ProjectId:       project.Id,
 			InventoryItemId: inventoryItem,
+			Count:           count,
 		}
 		err = tx.Insert(&projectInventoryItem)
 		if err != nil {
@@ -59,7 +60,7 @@ func CreateProject(project Project, inventoryItems []int) (*Project, error) {
 	return GetProject(project.Id, project.CategoryId)
 }
 
-func UpdateProject(project Project, inventoryItems []int) error {
+func UpdateProject(project Project, inventoryItems map[int]int) error {
 	tx, err := dbMap.Begin()
 	if err != nil {
 		return err
@@ -80,11 +81,17 @@ func UpdateProject(project Project, inventoryItems []int) error {
 		//language=postgresql
 		_, err = tx.Exec(`
 with incoming(data) as (values ($2::jsonb)),
-     parsed as (select (jsonb_array_elements_text(data))::int as inventory_item_id from incoming),
+     parsed as (
+         select 
+             (key)::int   as inventory_item_id,
+             (value)::int as count
+         from incoming, jsonb_each_text(data) as kv(key, value)
+     ),
      upserted as (
-         insert into project_inventory_item (project_id, inventory_item_id)
-             select $1, inventory_item_id from parsed
-             on conflict (inventory_item_id, project_id) do nothing
+         insert into project_inventory_item (project_id, inventory_item_id, count)
+             select $1, inventory_item_id, count from parsed
+             on conflict (inventory_item_id, project_id) do 
+             update set count = excluded.count
              returning inventory_item_id)
 delete
 from project_inventory_item
@@ -116,7 +123,7 @@ func ArchiveCategory(categoryId int) error {
 	//language=postgresql
 	_, err = dbMap.Exec(`
 with inventory as (
-	select ii.id, count(ii)
+	select ii.id, sum(pii.count) as count
 	from inventory_item ii
 		join project_inventory_item pii on pii.inventory_item_id = ii.id
 		join project p on p.id = pii.project_id
@@ -124,7 +131,7 @@ with inventory as (
 	group by ii.id
 )
 update inventory_item ii
-set count = ii.count - inventory.count
+set count = min(ii.count - inventory.count, 0)
 from inventory
 where ii.id = inventory.id`, categoryId)
 
@@ -140,9 +147,9 @@ func ArchiveProject(projectId, categoryId int) error {
 	//language=postgresql
 	_, err = dbMap.Exec(`
 with inventory as (
-    select ii.id, count(ii)
-        from inventory_item ii
-    join project_inventory_item pii on pii.inventory_item_id = ii.id
+    select ii.id, sum(pii.count) as count
+	from inventory_item ii
+    	join project_inventory_item pii on pii.inventory_item_id = ii.id
     where ii.count > 0 and pii.project_id = $1
     group by ii.id
 )

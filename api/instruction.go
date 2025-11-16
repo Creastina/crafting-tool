@@ -173,7 +173,6 @@ func replaceSteps(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var body []struct {
-		Id          int    `json:"id"`
 		Description string `json:"description"`
 		Done        bool   `json:"done"`
 	}
@@ -190,7 +189,6 @@ func replaceSteps(w http.ResponseWriter, r *http.Request) {
 	instructionSteps := make([]database.InstructionStep, len(body))
 	for i, step := range body {
 		instructionSteps[i] = database.InstructionStep{
-			Id:            step.Id,
 			InstructionId: instructionId,
 			Description:   step.Description,
 			Done:          step.Done,

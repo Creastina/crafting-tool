@@ -61,7 +61,12 @@ type Project struct {
 
 func (p *Project) fillInventoryItems() {
 	inventoryItems, err := Select[InventoryItem](`
-select ii.*
+select ii.box_id,
+       ii.id,
+       ii.name,
+       ii.note,
+       ii.unit,
+       pii.count
 from inventory_item ii
          inner join public.project_inventory_item pii on ii.id = pii.inventory_item_id
 where pii.project_id = $1
@@ -76,6 +81,7 @@ where pii.project_id = $1
 type ProjectInventoryItem struct {
 	ProjectId       int `db:"project_id" json:"-"`
 	InventoryItemId int `db:"inventory_item_id" json:"-"`
+	Count           int `db:"count" json:"count"`
 }
 
 type Instruction struct {

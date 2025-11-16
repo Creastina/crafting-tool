@@ -1,5 +1,6 @@
 import { CloseEvent } from '../close-event.js';
 import { get, post } from '../../lib/jinya-http.js';
+import { setItemCount } from './count-setter.js';
 
 class ProjectCreatedEvent extends Event {
   constructor(project) {
@@ -47,6 +48,7 @@ Alpine.data('createProject', () => ({
   selectItem(id) {
     const item = this.foundItems.find((item) => item.id === id);
     if (item) {
+      item.count = 1;
       this.inventoryItems.push(item);
       this.foundItems = this.foundItems.filter((item) => item.id !== id);
       this.inventorySearch = '';
@@ -54,6 +56,11 @@ Alpine.data('createProject', () => ({
   },
   deselectItem(id) {
     this.inventoryItems = this.inventoryItems.filter((item) => item.id !== id);
+  },
+  async changeCount(item) {
+    const count = await setItemCount(item, item.count);
+    const itemIdx = this.inventoryItems.indexOf(item);
+    this.inventoryItems[itemIdx].count = count;
   },
 }));
 
@@ -84,7 +91,7 @@ class CreateProjectElement extends HTMLElement {
               <p x-text="errorMessage"></p>
             </div>
             <div class="creastina-form">
-              <label for="name" class="creastina-form__label">Sache</label>
+              <label for="name" class="creastina-form__label">Projekt</label>
               <input id="name" x-model="name" type="text" class="creastina-input" required>
               <label for="note" class="creastina-form__label">Notiz</label>
               <input id="note" x-model="note" type="text" class="creastina-input">
@@ -103,9 +110,23 @@ class CreateProjectElement extends HTMLElement {
             </div>
             <ul class="creastina-project__inventory">
               <template x-for="item in inventoryItems" :key="item.id">
-                <li>
-                  <span x-text="item.name"></span>
-                  <button class="creastina-button is--negative is--icon" type="button" @click="deselectItem(item.id)">
+                <li class="creastina-project__inventory-item">
+                  <span class="creastina-project__inventory-name" x-text="item.name"></span>
+                  <span class="creastina-project__inventory-note" x-text="item.note"></span>
+                  <button class="creastina-button is--accent-1 is--icon is--item-count" type="button" @click="changeCount(item)"">
+                    <span x-text="item.count"></span>
+                    <svg viewBox="0 0 24 24">
+                      <path
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M3.5 18.985V20.5h1.514c1.227 0 1.84 0 2.391-.228c.551-.229.985-.662 1.852-1.53l9.864-9.863c.883-.883 1.324-1.324 1.373-1.866q.012-.135 0-.269c-.05-.541-.49-.983-1.373-1.865c-.883-.883-1.324-1.324-1.865-1.373a1.5 1.5 0 0 0-.27 0c-.541.049-.982.49-1.865 1.373l-9.864 9.864c-.867.867-1.3 1.3-1.529 1.852c-.228.55-.228 1.164-.228 2.39M13.5 6.5l4 4"
+                      />
+                    </svg>
+                  </button>
+                  <button class="creastina-button is--negative is--icon is--delete-item" type="button" @click="deselectItem(item.id)">
                     <svg viewBox="0 0 24 24">
                       <path
                         fill="none"
@@ -116,7 +137,6 @@ class CreateProjectElement extends HTMLElement {
                       />
                     </svg>
                   </button>
-                  <span x-text="item.note"></span>
                 </li>
               </template>
             </ul>
@@ -139,7 +159,10 @@ class CreateProjectElement extends HTMLElement {
       const projectData = Alpine.$data(this.root.querySelector('#dialog'));
       const data = projectData.data;
 
-      data.inventoryItems = data.inventoryItems.map((item) => item.id);
+      data.inventoryItems = data.inventoryItems.reduce((acc, item) => {
+        acc[item.id] = item.count;
+        return acc;
+      }, {});
 
       try {
         await post(`/api/project/category/${categoryId}/project`, Alpine.raw(data));

@@ -28,7 +28,8 @@
     background-color: var(--background-color);
   }
 
-  &.is--toggled {
+  &.is--toggled,
+  &.is--accent-1 {
     background-color: var(--accent-1-color);
     color: var(--background-color);
   }
@@ -37,6 +38,16 @@
     padding: 0.25rem;
     border-radius: 0.5rem;
     background: none;
+
+    &.is--accent-1 {
+      color: var(--accent-1-color);
+
+      &:hover {
+        filter: none;
+        background-color: var(--accent-1-color);
+        color: var(--background-color);
+      }
+    }
 
     &.is--primary {
       color: var(--primary-color);

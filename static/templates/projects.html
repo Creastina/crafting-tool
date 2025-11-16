@@ -106,11 +106,14 @@
                 </div>
                 <div class="creastina-card__content">
                   <span x-text="project.note" class="creastina-card__not-so-sidenote"></span>
-                  <ul class="creastina-project__inventory is--card">
+                  <ul class="creastina-project__inventory">
                     <template x-for="item in project.inventoryItems" :key="item.id">
-                      <li>
-                        <span x-text="item.name"></span>
-                        <span style="font: var(--not-so-sidenote)" x-text="item.note"></span>
+                      <li class="creastina-project__inventory-item is--card">
+                        <div class="creastina-project__inventory-name">
+                          <span x-text="item.count + '×'"></span>
+                          <span x-text="item.name"></span>
+                        </div>
+                        <span class="creastina-project__inventory-note" style="font: var(--not-so-sidenote)" x-text="item.note"></span>
                       </li>
                     </template>
                   </ul>
