@@ -6,15 +6,7 @@ module.exports = [
   {
     ...js.configs.recommended,
     ...prettier,
-    files: [
-      '/public/installer/**/*.js',
-      '/public/designer/js/**/*.js',
-      '/public/designer/lang/**/*.js',
-    ],
-    ignore: [
-      '/vendor',
-      '/themes',
-    ],
+    files: ['/static/js/**/*.js'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',

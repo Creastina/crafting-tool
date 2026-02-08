@@ -13,9 +13,9 @@
   display: grid;
   align-items: center;
   grid-template:
-      "name count delete" auto
-      "sidenote sidenote sidenote" auto
-      / 1fr auto auto;
+    'name count delete' auto
+    'sidenote sidenote sidenote' auto
+    / 1fr auto auto;
   padding-bottom: 0.25rem;
   padding-top: 0.25rem;
   border-bottom: 0.125rem solid var(--accent-1-color);
@@ -26,9 +26,9 @@
 
   &.is--card {
     grid-template:
-        "name" auto
-        "sidenote" auto
-        / 1fr;
+      'name' auto
+      'sidenote' auto
+      / 1fr;
     border-bottom: none;
   }
 

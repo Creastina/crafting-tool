@@ -29,10 +29,9 @@
 
         <script src="/static/lib/ui/loader.js"></script>
         <script>
-            window.creastinaConfig = {
-                openIdClientId: '{{ .OidcFrontendClientId }}',
-                openIdUrl: 'https://{{ .OidcDomain }}',
-                openIdCallbackUrl: `${location.origin}/login/callback`
+            window.creastinaOpenIdConfig = {
+              authority: 'https://{{ .OidcDomain }}',
+              client_id: '{{ .OidcFrontendClientId }}',
             };
         </script>
     </head>

@@ -5,8 +5,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     defaultPage: 'inventory',
     baseScriptPath: '/static/js',
     routerBasePath: '/',
-    openIdClientId: window.creastinaConfig.openIdClientId,
-    openIdUrl: window.creastinaConfig.openIdUrl,
-    openIdCallbackUrl: window.creastinaConfig.openIdCallbackUrl,
+    openIdConfig: creastinaOpenIdConfig,
+    storagePrefix: '/creastina/crafting',
   });
 });

@@ -8,9 +8,10 @@
         <div class="creastina-sidebar__header">
           <svg viewBox="0 0 24 24">
             <g fill="none" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h3M3 17h6m9 0h3M15 7h6"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h3M3 17h6m9 0h3M15 7h6" />
               <path
-                d="M6 7c0-.932 0-1.398.152-1.765a2 2 0 0 1 1.083-1.083C7.602 4 8.068 4 9 4s1.398 0 1.765.152a2 2 0 0 1 1.083 1.083C12 5.602 12 6.068 12 7s0 1.398-.152 1.765a2 2 0 0 1-1.083 1.083C10.398 10 9.932 10 9 10s-1.398 0-1.765-.152a2 2 0 0 1-1.083-1.083C6 8.398 6 7.932 6 7Zm6 10c0-.932 0-1.398.152-1.765a2 2 0 0 1 1.083-1.083C13.602 14 14.068 14 15 14s1.398 0 1.765.152a2 2 0 0 1 1.083 1.083C18 15.602 18 16.068 18 17s0 1.398-.152 1.765a2 2 0 0 1-1.083 1.083C16.398 20 15.932 20 15 20s-1.398 0-1.765-.152a2 2 0 0 1-1.083-1.083C12 18.398 12 17.932 12 17Z"/>
+                d="M6 7c0-.932 0-1.398.152-1.765a2 2 0 0 1 1.083-1.083C7.602 4 8.068 4 9 4s1.398 0 1.765.152a2 2 0 0 1 1.083 1.083C12 5.602 12 6.068 12 7s0 1.398-.152 1.765a2 2 0 0 1-1.083 1.083C10.398 10 9.932 10 9 10s-1.398 0-1.765-.152a2 2 0 0 1-1.083-1.083C6 8.398 6 7.932 6 7Zm6 10c0-.932 0-1.398.152-1.765a2 2 0 0 1 1.083-1.083C13.602 14 14.068 14 15 14s1.398 0 1.765.152a2 2 0 0 1 1.083 1.083C18 15.602 18 16.068 18 17s0 1.398-.152 1.765a2 2 0 0 1-1.083 1.083C16.398 20 15.932 20 15 20s-1.398 0-1.765-.152a2 2 0 0 1-1.083-1.083C12 18.398 12 17.932 12 17Z"
+              />
             </g>
           </svg>
           <span>Meine Kategorien</span>
@@ -43,8 +44,8 @@
         <div class="creastina-content">
           <div class="creastina-toolbar">
             <button class="creastina-button is--primary" @click="createProject">Neues Projekt</button>
-            <button class="creastina-button" :class="{ 'is--toggled': archived }" @click="toggleArchived">Archivierte
-              Projekte
+            <button class="creastina-button" :class="{ 'is--toggled': archived }" @click="toggleArchived">
+              Archivierte Projekte
             </button>
             <button class="creastina-button" @click="archiveAll">Alle Projekte archivieren</button>
           </div>
@@ -57,12 +58,19 @@
                     <template x-if="!project.isArchived">
                       <button class="creastina-button is--icon is--primary" @click="archiveProject(project)">
                         <svg viewBox="0 0 24 24">
-                          <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                             stroke-width="2">
+                          <g
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                          >
                             <path
-                              d="M7 21h10c2.357 0 3.535 0 4.268-.732C22 19.535 22 18.357 22 16s0-3.536-.732-4.268C20.535 11 19.357 11 17 11H7c-2.357 0-3.535 0-4.268.732S2 13.642 2 16s0 3.535.732 4.268S4.642 21 7 21M4 11c0-1.4 0-2.1.273-2.635a2.5 2.5 0 0 1 1.092-1.092C5.9 7 6.6 7 8 7h8c1.4 0 2.1 0 2.635.272a2.5 2.5 0 0 1 1.092 1.093C20 8.9 20 9.6 20 11M6 7c0-1.4 0-2.1.273-2.635a2.5 2.5 0 0 1 1.092-1.092C7.9 3 8.6 3 10 3h4c1.4 0 2.1 0 2.635.272a2.5 2.5 0 0 1 1.092 1.093C18 4.9 18 5.6 18 7"/>
+                              d="M7 21h10c2.357 0 3.535 0 4.268-.732C22 19.535 22 18.357 22 16s0-3.536-.732-4.268C20.535 11 19.357 11 17 11H7c-2.357 0-3.535 0-4.268.732S2 13.642 2 16s0 3.535.732 4.268S4.642 21 7 21M4 11c0-1.4 0-2.1.273-2.635a2.5 2.5 0 0 1 1.092-1.092C5.9 7 6.6 7 8 7h8c1.4 0 2.1 0 2.635.272a2.5 2.5 0 0 1 1.092 1.093C20 8.9 20 9.6 20 11M6 7c0-1.4 0-2.1.273-2.635a2.5 2.5 0 0 1 1.092-1.092C7.9 3 8.6 3 10 3h4c1.4 0 2.1 0 2.635.272a2.5 2.5 0 0 1 1.092 1.093C18 4.9 18 5.6 18 7"
+                            />
                             <path
-                              d="m16 15l-.3.4c-.589.785-.883 1.178-1.306 1.389c-.422.211-.913.211-1.894.211h-1c-.981 0-1.472 0-1.894-.211c-.423-.211-.717-.604-1.306-1.389L8 15"/>
+                              d="m16 15l-.3.4c-.589.785-.883 1.178-1.306 1.389c-.422.211-.913.211-1.894.211h-1c-.981 0-1.472 0-1.894-.211c-.423-.211-.717-.604-1.306-1.389L8 15"
+                            />
                           </g>
                         </svg>
                       </button>
@@ -70,11 +78,17 @@
                     <template x-if="project.isArchived">
                       <button class="creastina-button is--icon is--primary" @click="unarchiveProject(project)">
                         <svg viewBox="0 0 24 24">
-                          <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                             stroke-width="2">
+                          <g
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                          >
                             <path
-                              d="M21 7H3v6c0 3.771 0 5.657 1.172 6.828S7.229 21 11 21h2c3.771 0 5.657 0 6.828-1.172S21 16.771 21 13zm0 0H3l1.2-1.6c.883-1.178 1.325-1.767 1.958-2.083C6.792 3 7.528 3 9 3h6c1.472 0 2.208 0 2.842.317c.633.316 1.075.905 1.958 2.083z"/>
-                            <path d="M12 11v6.5m-3-4c.59-.607 2.16-3 3-3s2.41 2.393 3 3"/>
+                              d="M21 7H3v6c0 3.771 0 5.657 1.172 6.828S7.229 21 11 21h2c3.771 0 5.657 0 6.828-1.172S21 16.771 21 13zm0 0H3l1.2-1.6c.883-1.178 1.325-1.767 1.958-2.083C6.792 3 7.528 3 9 3h6c1.472 0 2.208 0 2.842.317c.633.316 1.075.905 1.958 2.083z"
+                            />
+                            <path d="M12 11v6.5m-3-4c.59-.607 2.16-3 3-3s2.41 2.393 3 3" />
                           </g>
                         </svg>
                       </button>
@@ -113,7 +127,11 @@
                           <span x-text="item.count + '×'"></span>
                           <span x-text="item.name"></span>
                         </div>
-                        <span class="creastina-project__inventory-note" style="font: var(--not-so-sidenote)" x-text="item.note"></span>
+                        <span
+                          class="creastina-project__inventory-note"
+                          style="font: var(--not-so-sidenote)"
+                          x-text="item.note"
+                        ></span>
                       </li>
                     </template>
                   </ul>

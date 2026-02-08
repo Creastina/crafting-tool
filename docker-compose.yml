@@ -7,4 +7,4 @@
       POSTGRES_ROOT_PASSWORD: crafting
       POSTGRES_USER: crafting
     ports:
-      - "5439:5432"
+      - "5440:5432"

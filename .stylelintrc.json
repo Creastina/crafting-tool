@@ -3,15 +3,6 @@
     "stylelint-config-standard"
   ],
   "rules": {
-    "selector-class-pattern": ".*",
-    "unit-allowed-list": [
-      "%",
-      "deg",
-      "rem",
-      "s",
-      "vh",
-      "vw",
-      "fr"
-    ]
+    "selector-class-pattern": ".*"
   }
 }
