@@ -3,7 +3,7 @@ package database
 import "encoding/json"
 
 func GetProjects(categoryId int) ([]Project, error) {
-	projects, err := Select[Project]("select * from project where category_id = $1", categoryId)
+	projects, err := dbMap.SelectType[Project]("select * from project where category_id = $1", categoryId)
 	if err != nil {
 		return nil, err
 	}
@@ -17,7 +17,7 @@ func GetProjects(categoryId int) ([]Project, error) {
 }
 
 func GetProject(projectId, categoryId int) (*Project, error) {
-	project, err := SelectOne[Project]("select * from project where id = $1 and category_id = $2", projectId, categoryId)
+	project, err := dbMap.SelectOneType[Project]("select * from project where id = $1 and category_id = $2", projectId, categoryId)
 	if err != nil {
 		return nil, err
 	}

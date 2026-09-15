@@ -28,7 +28,7 @@ type InventoryItemWithBoxName struct {
 func (i *InventoryItem) fillProperties() {
 	i.Properties = make(map[string]string)
 
-	props, err := Select[InventoryItemProperty]("select * from inventory_item_property where inventory_item_id = $1", i.Id)
+	props, err := dbMap.SelectType[InventoryItemProperty]("select * from inventory_item_property where inventory_item_id = $1", i.Id)
 	if err != nil {
 		return
 	}
@@ -60,7 +60,7 @@ type Project struct {
 }
 
 func (p *Project) fillInventoryItems() {
-	inventoryItems, err := Select[InventoryItem](`
+	inventoryItems, err := dbMap.SelectType[InventoryItem](`
 select ii.box_id,
        ii.id,
        ii.name,

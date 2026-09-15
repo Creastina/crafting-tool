@@ -4,7 +4,7 @@ import (
 	"context"
 	"crafting/config"
 
-	"github.com/DerKnerd/gorp"
+	"github.com/DerKnerd/gorp/v4"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jackc/pgx/v5/stdlib"
 )
@@ -27,20 +27,20 @@ func SetupDatabase() {
 		dialect := gorp.PostgresDialect{}
 
 		dbMap = &gorp.DbMap{Db: conn, Dialect: dialect}
-		AddTableWithName[InventoryBox]("inventory_box")
-		AddTableWithName[InventoryItem]("inventory_item").
+		dbMap.AddTableWithName[InventoryBox]("inventory_box")
+		dbMap.AddTableWithName[InventoryItem]("inventory_item").
 			SetUniqueTogether("box_id", "name")
-		AddTableWithName[InventoryItemProperty]("inventory_item_property").
+		dbMap.AddTableWithName[InventoryItemProperty]("inventory_item_property").
 			SetUniqueTogether("inventory_item_id", "name")
 
-		AddTableWithName[ProjectCategory]("project_category")
-		AddTableWithName[Project]("project").
+		dbMap.AddTableWithName[ProjectCategory]("project_category")
+		dbMap.AddTableWithName[Project]("project").
 			SetUniqueTogether("category_id", "name")
-		AddTableWithName[ProjectInventoryItem]("project_inventory_item").
+		dbMap.AddTableWithName[ProjectInventoryItem]("project_inventory_item").
 			SetUniqueTogether("project_id", "inventory_item_id")
 
-		AddTableWithName[Instruction]("instruction")
-		AddTableWithName[InstructionStep]("instruction_step")
+		dbMap.AddTableWithName[Instruction]("instruction")
+		dbMap.AddTableWithName[InstructionStep]("instruction_step")
 
 		err = GetDbMap().CreateTablesIfNotExists()
 		if err != nil {

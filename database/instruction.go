@@ -1,11 +1,11 @@
 package database
 
 func GetInstructions() ([]InstructionWithStepCount, error) {
-	return Select[InstructionWithStepCount]("select * from instruction_with_step_count")
+	return dbMap.SelectType[InstructionWithStepCount]("select * from instruction_with_step_count")
 }
 
 func GetInstruction(id int) (*InstructionWithStepCount, error) {
-	return SelectOne[InstructionWithStepCount]("select * from instruction_with_step_count where id = $1", id)
+	return dbMap.SelectOneType[InstructionWithStepCount]("select * from instruction_with_step_count where id = $1", id)
 }
 
 func CreateInstruction(instruction Instruction, steps []string) (*InstructionWithStepCount, error) {
@@ -80,11 +80,11 @@ insert into instruction_step (instruction_id, description, done, position) value
 }
 
 func GetInstructionSteps(instructionId int) ([]InstructionStep, error) {
-	return Select[InstructionStep]("select * from instruction_step where instruction_id = $1 order by id", instructionId)
+	return dbMap.SelectType[InstructionStep]("select * from instruction_step where instruction_id = $1 order by id", instructionId)
 }
 
 func GetInstructionStep(stepId, instructionId int) (*InstructionStep, error) {
-	return SelectOne[InstructionStep]("select * from instruction_step where id = $1 instruction_id = $2", stepId, instructionId)
+	return dbMap.SelectOneType[InstructionStep]("select * from instruction_step where id = $1 instruction_id = $2", stepId, instructionId)
 }
 
 func CreateInstructionStep(instructionStep InstructionStep) (*InstructionStep, error) {

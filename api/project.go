@@ -12,7 +12,7 @@ import (
 func getProjectCategories(w http.ResponseWriter, r *http.Request) {
 	encoder := json.NewEncoder(w)
 
-	projectCategories, err := database.Select[database.ProjectCategory]("select * from project_category order by name")
+	projectCategories, err := database.GetDbMap().SelectType[database.ProjectCategory]("select * from project_category order by name")
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		_ = encoder.Encode(map[string]string{
@@ -37,7 +37,7 @@ func getProjectCategory(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	projectCategory, err := database.Get[database.ProjectCategory](categoryId)
+	projectCategory, err := database.GetDbMap().GetType[database.ProjectCategory](categoryId)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		_ = encoder.Encode(map[string]string{

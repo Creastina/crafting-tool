@@ -3,7 +3,7 @@ package database
 import "encoding/json"
 
 func SearchInventoryItems(query string) ([]InventoryItemWithBoxName, error) {
-	items, err := Select[InventoryItemWithBoxName](`select distinct ii.*, ib.name as box_name
+	items, err := dbMap.SelectType[InventoryItemWithBoxName](`select distinct ii.*, ib.name as box_name
 from inventory_item ii
          full join inventory_item_property iip on ii.id = iip.inventory_item_id
          inner join inventory_box ib on ii.box_id = ib.id
@@ -24,7 +24,7 @@ order by ii.name`, "%"+query+"%")
 }
 
 func GetInventoryItems(boxId int) ([]InventoryItemWithProjectCount, error) {
-	items, err := Select[InventoryItemWithProjectCount]("select * from inventory_item_with_count where box_id = $1", boxId)
+	items, err := dbMap.SelectType[InventoryItemWithProjectCount]("select * from inventory_item_with_count where box_id = $1", boxId)
 	if err != nil {
 		return nil, err
 	}
@@ -38,7 +38,7 @@ func GetInventoryItems(boxId int) ([]InventoryItemWithProjectCount, error) {
 }
 
 func GetInventoryItem(id, boxId int) (*InventoryItemWithProjectCount, error) {
-	item, err := SelectOne[InventoryItemWithProjectCount]("select * from inventory_item_with_count where box_id = $1 and id = $2", boxId, id)
+	item, err := dbMap.SelectOneType[InventoryItemWithProjectCount]("select * from inventory_item_with_count where box_id = $1 and id = $2", boxId, id)
 	if err != nil {
 		return nil, err
 	}
