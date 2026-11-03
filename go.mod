@@ -5,7 +5,7 @@ go 1.27.0
 require (
 	github.com/DerKnerd/gorp/v4 v4.0.0
 	github.com/gorilla/mux v1.8.1
-	github.com/jackc/pgx/v5 v5.11.0
+	github.com/jackc/pgx/v5 v5.12.0
 	github.com/joho/godotenv v1.5.1
 	github.com/zitadel/zitadel-go/v3 v3.30.0
 	go-simpler.org/env v0.12.0
