@@ -7,7 +7,7 @@ require (
 	github.com/gorilla/mux v1.8.1
 	github.com/jackc/pgx/v5 v5.13.0
 	github.com/joho/godotenv v1.5.1
-	github.com/zitadel/zitadel-go/v3 v3.30.0
+	github.com/zitadel/zitadel-go/v3 v3.30.1
 	go-simpler.org/env v0.12.0
 )
 
